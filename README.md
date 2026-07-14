@@ -1,20 +1,27 @@
 # Mindbook
 
-The master Mindbook design repository — single source of truth for the product's designs, prototypes, PRDs, tokens, and design canon.
+> **Do life alone? Nah.**
 
-**Status: awaiting PRD.** No design work begins until the PRD lands in `docs/prd.md`. The repository structure, tokens, and canon will be derived from it — nothing here is invented ahead of the product definition.
+Mindbook is a community-driven emotional wellness platform for young Nigerians — a safe, anonymous space to share, heal, grow, and support others through life's challenges. Small private Circles of 5–10 people, daily emotional check-ins, and encouragement from peers and verified Guides.
 
-## Planned shape (to be confirmed against the PRD)
+This is the master repository: product docs, brand, design system, interactive prototypes, and (as the project progresses) the Flutter app and Spring Boot backend.
 
-```
-mindbook/
-  README.md            ← you are here
-  DESIGN-PRINCIPLES.md ← the operating philosophy for this design system
-  docs/prd.md          ← the PRD (to be added)
-  tokens/tokens.json   ← W3C DTCG design tokens (once brand is defined)
-  DESIGN.md            ← global tokens + hard rules (derived from tokens)
-  PATTERNS.md          ← per-platform widget recipe book
-  templates/           ← per-form-factor flow starters
-  products/            ← flows, screens, prototypes
-  scripts/             ← canon lint + tooling
-```
+## Repository map
+
+| Path | What |
+|---|---|
+| [docs/prd.md](./docs/prd.md) | The PRD (working copy, v1.1) + original PDF |
+| [BRAND.md](./BRAND.md) | Creative direction — *a lamplit room*: paper, ink & clay palette, Sentient + Author type, voice, UX doctrine |
+| [DESIGN.md](./DESIGN.md) | Implementation rules — tokens, hard rules, component specs |
+| [tokens/tokens.json](./tokens/tokens.json) | W3C DTCG design tokens |
+| `prototypes/` | Clickable device-only HTML prototypes (design source of truth) |
+| `app/` | Flutter application (upcoming) |
+| `backend/` | Java / Spring Boot API (upcoming) |
+
+## Working agreements
+
+- **Prototype-first**: every flow is designed as an interactive HTML prototype before any app code.
+- **Never invent**: colors, type, spacing, and components come from BRAND.md / DESIGN.md / tokens.json only.
+- Read order for any design task: BRAND.md → DESIGN.md → tokens.json.
+
+*Private repository · Mindbook · Lagos, Nigeria*
