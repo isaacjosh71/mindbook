@@ -1,147 +1,153 @@
-# Mindbook Brand & Creative Direction
+# Mindbook Brand & Creative Direction — v2
 
-> The single source of truth for what Mindbook looks, sounds, and feels like. Tokens live in [tokens/tokens.json](./tokens/tokens.json); implementation rules in [DESIGN.md](./DESIGN.md).
+> The single source of truth for what Mindbook looks, sounds, and feels like. Tokens live in [tokens/tokens.json](./tokens/tokens.json); implementation rules in [DESIGN.md](./DESIGN.md). v2 replaces the v1 "paper & clay" direction with a cool, calm water-based identity.
 
-## 1. The concept — *a lamplit room*
+## 1. The concept — *a quiet lake at dusk*
 
-Think about **when** someone opens Mindbook: late at night when the thoughts are loud, on a danfo after a hard day, between lectures, after the call that broke them. They are not coming to be entertained. They are coming to put something heavy down.
+Mindbook is where people come to put a feeling down. The image that carries the whole brand: **a still lake in the evening — a single drop lands, the water receives it, the ripples widen and settle.**
 
-So Mindbook is not a dashboard, not a clinic, and not a social feed. It is **a lamplit room** — warm, quiet, slightly dim, with a few trusted people in it. Everything in the design serves that image:
+It maps 1:1 to the product:
 
-- **Paper, not screens.** Warm cream surfaces, ink instead of black, a serif voice for the moments that matter. The "book" in Mindbook is literal: this is a shared journal, not a timeline.
-- **Lamplight, not neon.** One warm clay accent that glows against the paper. No gradients-of-the-week, no glassmorphism, no electric anything.
-- **Circles, everywhere.** The Circle is the product's heart, so the circle is the brand's core shape — avatars, mood orbs, member rings, the logo's embrace. Soft corners on everything else.
-- **Quiet, not silent.** Calm ≠ clinical. The room has warmth: Nigerian directness in the copy ("Do life alone? Nah."), human textures, gentle motion like breathing.
+- **The drop** = the feeling you've been carrying (the mood orb, the post you finally write).
+- **The water** = the app: calm, deep, judgment-free, it receives everything without splashing back.
+- **The ripple** = your Circle: one share reaching a small ring of people, then settling into calm.
+
+Everything in the design serves that image: cool misty surfaces, deep-water ink, one calm tide-blue for action, a single moonlight-gold accent for warmth, motion that behaves like water (rises, ripples, breathes — never bounces).
 
 ### What Mindbook is NOT (anti-references)
-- ❌ Calm/Headspace clone — no meditating silhouettes, no lotus, no lavender-teal gradient wash
-- ❌ Clinical health app — no medical blue, no charts-first, no "patient" energy
-- ❌ Social media — no infinite scroll dopamine, no like-counters as scoreboard, no red badge anxiety
-- ❌ Church app — Faith is one Community, not the brand
-- ❌ Rechaj or any sibling — no electric green, no cool-grey off-whites, no General Sans
+- ❌ Calm/Headspace clone — no meditating silhouettes, no purple-navy gradient wash, no cartoon blobs
+- ❌ Clinical health app — cool ≠ cold; no hospital blue-on-white, no charts-first energy
+- ❌ Social media — no dopamine loops, no like scoreboards, no red badge anxiety
+- ❌ AI-default kit — no Inter/Satoshi, no teal-lavender gradient, no glassmorphism
+- ❌ Anything from sibling products (no Rechaj green, no General Sans)
 
-## 2. Color — *paper, ink, clay*
+## 2. Color — *mist, deep water, moonlight*
 
-The palette is built from three materials: **paper** (warm cream surfaces), **ink** (deep plum-charcoal text — never pure black), and **clay** (the terracotta accent: earthy, Nigerian, human, warm). Support tones are dusk blue, sage green, and honey amber — all muted, all warm-leaning.
+Cool and calm, built from three materials: **mist** (cool off-white surfaces), **deep water** (blue-green ink, never black), and **tide** (the calm ocean-blue action color). One warm note — **moonlight gold** — so the coolness never turns clinical. Both light and dark themes ship from day one; dark is the "night lake".
+
+### Light theme
 
 | Role | Token | Value | Notes |
 |---|---|---|---|
-| Brand / primary action | `clay.6` | **#B9542F** | Terracotta. CTAs, active states, focus. Warm cream `#FFF9F4` text on clay (AA at this depth). |
-| Clay pressed/hover | `clay.7` | #9C4426 | |
-| Clay tint | `clay-dim` | rgba(185,84,47,.10) | Selected/hover washes, tonal icon frames |
-| Page canvas | `paper` | **#FAF5EE** | Warm cream — never pure white, never cool |
-| Card surface | `surface` | #FFFCF8 | Warm near-white; floats on paper |
-| Ink primary | `ink.1` | **#2E2433** | Plum-charcoal. All primary text. Never #000. |
-| Ink secondary | `ink.2` | #6E6172 | |
-| Ink muted | `ink.3` | #9C92A1 | |
-| Border | `border` | #EBE1D6 | Warm; hairlines only, never on cards |
-| Success / growth | `sage.6` | #5E8C63 | Tint rgba(94,140,99,.14), text-on-tint #3F6B45 |
-| Info / calm | `dusk.6` | #567A9B | Tint rgba(86,122,155,.13), text-on-tint #3E5F7E |
-| Attention | `honey.6` | #D9982B | Tint rgba(217,152,43,.16), text-on-tint #8A5B0F |
-| Danger (muted) | `rose.6` | #C24545 | Tint rgba(194,69,69,.10). Soft — never alarm-red screaming at a hurting person. |
-| Night canvas (dark mode, later) | `night` | #211B26 | Plum-black, warm |
+| Brand / primary action | `tide.6` | **#33718A** | Deep calm ocean blue. CTAs, active states, links, focus. Text on tide = `#F2FAFC`. |
+| Tide pressed | `tide.7` | #285D73 | |
+| Tide tint | `tide-dim` | rgba(51,113,138,.10) | Selected washes, tonal icon frames |
+| Page canvas | `mist` | **#F3F6F6** | Cool off-white — never pure white |
+| Card surface | `surface` | #FCFEFD | |
+| Ink primary | `ink.1` | **#213238** | Deep-water slate. Never #000. |
+| Ink secondary | `ink.2` | #5C6E74 | |
+| Ink muted | `ink.3` | #8FA1A6 | |
+| Border | `border` | #DDE6E5 | Hairlines/inputs only, never cards |
+| Growth / success | `sage.6` | #4E8D7C | Cool sea-green. Tint rgba(78,141,124,.14), deep #33685A |
+| Info / calm | `peri.6` | #6B7FB3 | Periwinkle. Tint rgba(107,127,179,.13), deep #4A5C8F |
+| Warmth / celebration | `moon.6` | #C9A24B | Moonlight gold — the one warm note. Tint rgba(201,162,75,.16), deep #8A6A1F |
+| Danger (muted) | `rose.6` | #C05B5B | Tint rgba(192,91,91,.10), deep #9E4343. Soft, never alarm-red. |
+| Storm (mood/story) | `storm.6` | #4A4E75 | Indigo-storm. Tint rgba(74,78,117,.12) |
+
+### Dark theme — *the night lake*
+
+| Role | Value |
+|---|---|
+| Canvas | `#0F181C` · Surface `#17232A` · Hover `#1E2D34` · Track `#22333B` |
+| Ink | `#E7EEF0` / `#9FB2B8` / `#6E8188` |
+| Borders | `#26363E` / `#1D2C33` |
+| Tide (action) | **#5CA2BC** with dark text `#0D1A20` on fills |
+| Moon `#D9B66A` · Sage `#6FAE9C` · Peri `#8B9CC9` · Rose `#D07A7A` |
+| Tints | same rgba recipes at slightly higher alpha; tinted text uses the light-theme main colors |
 
 **Rules**
-- Clay is for **interaction** (buttons, active tabs, links, focus) — never for status.
-- Status semantics: sage = positive/growth · dusk = info/in-progress · honey = attention · rose = danger/report. Tinted-bg + deep-tint-text pairs, same recipe everywhere.
-- Every neutral in the app is **warm** (yellow-plum leaning). If a grey looks blue, it's wrong.
+- Tide is for **interaction only** — never status. Status: sage = positive/growth · peri = info/in-progress · moon = attention/celebration · rose = danger/report.
+- Every neutral is **cool** (blue-green leaning) but soft — if a surface reads hospital-white or the grey feels dead, warm it a step with green, not yellow.
+- Moon gold is precious: celebration glows, the logo drop, "Good" moods, tiny highlights. Never large fills.
 
-### Mood ramp (check-ins)
+### Mood ramp (check-ins) — *weather over water*
 
-Five felt states, named in body language — not clinical terms, not emoji:
-
-| Mood | Color | Orb idea |
+| Mood | Color | Feels like |
 |---|---|---|
-| **Heavy** | deep plum #4E3A5C | low, dense orb |
-| **Low** | dusk #567A9B | drifting orb |
-| **Okay** | warm taupe #A5907C | level orb |
-| **Good** | honey #D9982B | rising orb |
-| **Light** | sage #5E8C63 | floating orb |
+| **Heavy** | storm indigo #4A4E75 | storm over the lake |
+| **Low** | rain slate #5C7A99 | grey drizzle |
+| **Okay** | mist green-grey #7F958F | fog lifting |
+| **Good** | clear aqua #4E9B8F | clean water |
+| **Light** | dawn gold #C9A24B | sun on the surface |
 
-Mood orbs are the app's one expressive illustration system: soft circular gradients/shapes, consistent geometry, no faces.
+Orbs stay circular, soft radial highlight, no faces, no emoji.
 
-## 3. Typography — *a book that talks like a friend*
+## 3. Typography — *soft voice, clear hands*
 
 | Layer | Face | Use |
 |---|---|---|
-| **Display serif** | **Sentient** (Fontshare) | The "book voice": greetings ("How are you, really?"), screen-title moments, onboarding statements, empty-state headlines, big mood words. Weights 400/500/600 + italic for warmth. |
-| **UI sans** | **Author** (Fontshare) | Everything functional: body, labels, buttons, meta. Humanist and warm, nothing like General Sans/Inter/Satoshi defaults. Weights 400/500/600. |
-| Numerals/meta mono | system mono, sparingly | timestamps, IDs in back office |
+| **Display** | **Ranade** (Fontshare) | The app's voice: greetings ("How are you, really?"), screen titles, onboarding statements, mood words. Soft, rounded, unhurried — calm without being sleepy. Weights 400/500/600 + italics. |
+| **UI** | **Switzer** (Fontshare) | Everything functional: body, labels, buttons, meta. Quiet, highly legible, disappears behind the content. Weights 400/500/600. |
 
 ```html
-<link href="https://api.fontshare.com/v2/css?f[]=sentient@400,401,500,501,600&f[]=author@400,500,600&display=swap" rel="stylesheet">
+<link href="https://api.fontshare.com/v2/css?f[]=ranade@400,401,500,501,600&f[]=switzer@400,500,600&display=swap" rel="stylesheet">
 ```
 
 **Rules**
-- Body is **15px** (support text deserves comfort; 14 is for meta), line-height 1.6 for reading, 1.4 for UI.
-- Weight ceiling: **600**. No 700 anywhere in v1 — even display numerals sit at 600 in serif; the serif carries the presence. `b, strong { font-weight: 600 }`.
-- Serif = emotional register only. If a string is functional (button, tab, form label), it's Author. If it's the room speaking to you, it's Sentient.
-- No uppercase-with-tracking labels except tiny section eyebrows (11px/600/0.08em, used sparingly).
+- Body 15px, reading line-height 1.6, UI 1.4. Weight ceiling **600** — nothing shouts in this app. `b, strong { font-weight: 600 }`.
+- Ranade = emotional register only. Buttons, tabs, form labels are always Switzer.
+- Lowercase wordmark: **mindbook** — Ranade 600, letter-spacing -0.01em.
 
-## 4. Shape, elevation, texture
+## 4. Logo — *the drop and the ripple*
 
-- **Radius scale:** cards & sheets **20px** · buttons/inputs **14px** · chips/pills 999px · avatars/mood orbs/icon frames **50%**.
-- **Cards have no borders.** One warm shadow only: `0 2px 16px rgba(76,54,44,0.08)` (`--sh-card`). Sheets get `0 -8px 40px rgba(46,36,51,0.18)`.
-- **Icon containers are circular** tonal frames (tint bg + deep-tint glyph). Photos/media may be rounded squares (12px).
-- **Spacing:** strict 4px grid. Mobile gutter 20px. Generous breathing room is a feature — when in doubt, add space, not elements.
-- Texture: none in v1 (no noise/paper grain overlays yet); warmth comes from color and type.
+No book. The mark is **a golden drop above two cupped ripple arcs**: a feeling, received and held. It echoes the mood orb (same gold circle that breathes at check-in), the Circle (a ring of people receiving one share), and reads as a soft open "m" in silhouette.
 
-## 5. Iconography
-
-- **Outline icons, 1.75 stroke, round caps/joins, `stroke="currentColor"` inline on every `<svg>`.** Never filled glyphs (the two-tone logo and mood orbs are the only filled marks).
-- Slightly **rounded, soft geometry** — icons should feel drawn by a calm hand, not stamped by a grid.
-- 20px glyph inside a 40px circular tonal frame (16px inside 32px for compact rows).
-
-## 6. Logo — *the open book, held*
-
-Concept: **an open book cradled inside a circle** — the shared journal, held by the Circle. Two-tone: clay left page, ink right page, on a paper-tint ring.
-
-v1 mark (to be refined visually in the first prototype pass):
+In-app mark (on mist/dark surfaces): moon-gold drop, tide arcs (outer arc lighter — ripples decay):
 
 ```html
 <svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
-  <circle cx="32" cy="32" r="30" fill="#F4E7D9"/>
-  <path d="M32 20c-5.5-4.2-13.5-4.6-18-2.4v26.2c4.5-2.2 12.5-1.8 18 2.4V20z" fill="#B9542F"/>
-  <path d="M32 20c5.5-4.2 13.5-4.6 18-2.4v26.2c-4.5-2.2-12.5-1.8-18 2.4V20z" fill="#2E2433"/>
+  <circle cx="32" cy="15" r="6" fill="#C9A24B"/>
+  <path d="M18 30a14 14 0 0 0 28 0" stroke="#33718A" stroke-width="5.5" stroke-linecap="round"/>
+  <path d="M9 34a23 23 0 0 0 46 0" stroke="#82AFC2" stroke-width="4.5" stroke-linecap="round"/>
 </svg>
 ```
 
-Wordmark: **mindbook** — lowercase, Sentient 600, ink, letter-spacing −0.01em. Lowercase because the brand sits beside you, it doesn't announce itself.
+App icon: night-lake gradient ground, glowing gold drop, pale mist ripples (see `assets/logo/app-icon.svg`). The same composition animates on the splash: **drop falls → ripples widen in sequence → orb settles into the breathing loop.**
+
+## 5. Shape, elevation
+
+- Radius: cards & sheets **20px** · buttons/inputs **14px** · chips/pills 999px · orbs/avatars/icon frames **50%**.
+- Cards: no borders, one cool shadow `0 2px 16px rgba(35,60,70,.08)` (light) — in dark, elevation comes from the lighter surface color, shadow stays subtle.
+- Icon containers circular, outline icons 1.75 stroke, round caps, `stroke="currentColor"` inline. Only the logo and mood orbs are filled.
+- Strict 4px grid, 20px mobile gutter. Space is the loudest design element in a calm app.
+
+## 6. Motion — *water physics*
+
+- Default 220ms `cubic-bezier(0.3, 0, 0.2, 1)`; sheets 300ms `cubic-bezier(0.2, 0.9, 0.25, 1)`.
+- Two signatures:
+  - **Breath** — orbs and success moments scale 1→1.035→1 on a 3.2s loop.
+  - **Ripple** — celebration/arrival moments expand a soft ring outward once (logo splash, Circle reveal, check-in saved). Ripples settle; they never bounce.
+- No confetti, no fireworks, no springy overshoot.
 
 ## 7. Voice & copy
 
-- **Warm Nigerian directness.** "Do life alone? Nah." is the register: short, human, zero jargon. Not corporate-wellness ("Unlock your best self" ❌), not clinical ("Log your symptoms" ❌).
-- The app asks like a friend: **"How are you, really?"** (check-in) · **"What's going on with you today?"** (composer) · "Small circle, real ones" (Circle intro).
-- Never diagnose, never prescribe, never toxic-positivity ("Good vibes only" ❌). Acknowledge first, encourage second.
-- Anonymity is stated visibly and often: "Posting as **HopefulSoul** · your real identity stays yours."
-- No emoji in UI chrome. No em dashes in copy — use ` · ` or a comma.
-- Crisis copy is calm, direct, and always one tap away.
+Unchanged from v1 — it was never the problem:
+- Warm Nigerian directness: "Do life alone? Nah."
+- Ask like a friend: "How are you, really?" · "What's going on with you today?"
+- Acknowledge first, encourage second. Never diagnose, never toxic-positivity.
+- Anonymity stated visibly: "Posting as **HopefulSoul** · your real identity stays yours."
+- No emoji in UI. No em dashes — use ` · ` or a comma. Crisis help is calm, direct, ≤2 taps away.
 
-## 8. Motion
+## 8. UX doctrine
 
-- Default 220ms `cubic-bezier(0.3, 0, 0.2, 1)`; sheets 300ms `cubic-bezier(0.2, 0.9, 0.25, 1)`.
-- One signature: **breathing** — the check-in orb and success moments scale 1→1.035→1 on a slow 3.2s loop. Calm, alive, never bouncy.
-- No confetti, no fireworks. Milestones glow (soft honey halo), they don't explode.
+1. **Calm by default** — no engagement bait, no streak-shaming, no red-badge anxiety.
+2. **Anonymity you can see** — identity confirmed at every point of exposure.
+3. **Small rooms first** — the Circle is home; no global firehose.
+4. **Consent at every share** — explicit audience picker, never defaults wider than the Circle.
+5. **Warmth over metrics** — "encouragements", quiet counts, no leaderboards on pain.
+6. **Safety one tap away** — report/block everywhere; crisis resources ≤2 taps.
+7. **The ritual gets space** — check-in and posting are unhurried, full-screen moments.
+8. **Both themes are first-class** — light = morning lake, dark = night lake; dark is not an afterthought (many users open this app at 1am).
 
-## 9. UX doctrine (product-level rules)
+## 9. Personas & naming
 
-1. **Calm by default** — no engagement bait, no streak-shaming, no red-badge anxiety; notification copy is gentle and skippable.
-2. **Anonymity you can see** — the user's anonymous identity is visibly confirmed at every point of exposure (composer, comments, join screens).
-3. **Small rooms first** — the Circle is home base; Community feeds are secondary; there is no global public firehose.
-4. **Consent at every share** — audience picker is explicit on every post; nothing defaults to wider than the Circle.
-5. **Warmth over metrics** — reactions are "encouragements", counts stay quiet and small; no leaderboards on pain.
-6. **Safety one tap away** — report/block on every piece of content; crisis resources reachable from anywhere in ≤2 taps.
-7. **The ritual gets space** — check-in and posting are full, unhurried moments (own screens, breathing motion), not cramped modals.
-
-## 10. Personas & naming conventions
-
-| Context | Persona | Anonymous handle |
+| Context | Persona | Handle |
 |---|---|---|
-| Primary member (Seeking Support) | Chidera, 23, final-year UNILAG student | **QuietRiver** |
-| Supporter member | Emeka, 29, product designer, healed from burnout | **SteadyOak** |
-| Verified Guide | Amara, 31, navigated grief | **StillWaters** (Guide ring) |
-| Moderator / back office | Folake Adeyemi, community ops | (real name, back office only) |
+| Primary member (Seeking) | Chidera, 23, final-year UNILAG student | **QuietRiver** |
+| Supporter | Emeka, 29, designer, healed from burnout | **SteadyOak** |
+| Verified Guide | Amara, 31, navigated grief | **StillWaters** (sage Guide ring) |
+| Moderator (back office) | Folake Adeyemi, community ops | real name, back office only |
 
-Display names: two gentle words, PascalCase (HopefulSoul, BraveHeart, StillHealing). Avatars: circular, abstract warm-palette patterns — never photos, never initials of real names.
+Display names: two gentle words, PascalCase. Avatars: circular abstract patterns in the cool palette — never photos, never real initials.
 
-ID formats (backend/back-office): user `MB-U-NNNNNN` · community `MB-C-NNNN` · circle `MB-C-NNNN-CIR-NN` · post `MB-P-NNNNNNNN` · report `RPT-YYMMDD-NNN`.
+ID formats: user `MB-U-NNNNNN` · community `MB-C-NNNN` · circle `MB-C-NNNN-CIR-NN` · post `MB-P-NNNNNNNN` · report `RPT-YYMMDD-NNN`.
