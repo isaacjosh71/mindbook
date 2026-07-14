@@ -1,0 +1,7 @@
+<svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Mindbook mark: the open book + the lamp orb.
+       In-app variant (sits on paper surfaces). Clay left page, ink right page, honey orb. -->
+  <circle cx="32" cy="14.5" r="5" fill="#D9982B"/>
+  <path d="M32 26.5C28.2 23 21.4 22.4 16.5 24.1c-1 .35-1.5 1.1-1.5 2.05v18.1c0 1.35 1.35 2.2 2.6 1.8 4.5-1.45 10.6-.75 14.4 2.75V26.5Z" fill="#B9542F"/>
+  <path d="M32 26.5c3.8-3.5 10.6-4.1 15.5-2.4 1 .35 1.5 1.1 1.5 2.05v18.1c0 1.35-1.35 2.2-2.6 1.8-4.5-1.45-10.6-.75-14.4 2.75V26.5Z" fill="#2E2433"/>
+</svg>

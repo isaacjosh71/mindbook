@@ -1,0 +1,845 @@
+<!DOCTYPE html>
+<!--
+  MINDBOOK · Canon prototype 01 — Onboarding → Identity → Check-in → Home
+  Canvas: 390×844 device-only on dark warm backdrop. No external chrome.
+  Source of truth: BRAND.md + DESIGN.md + tokens/tokens.json. Weight ceiling 600.
+-->
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Mindbook · Onboarding</title>
+<link rel="preconnect" href="https://api.fontshare.com"/>
+<link href="https://api.fontshare.com/v2/css?f[]=sentient@400,401,500,501,600&f[]=author@400,500,600&display=swap" rel="stylesheet"/>
+<style>
+/* ═══ tokens ═══ */
+:root{
+  --paper:#FAF5EE; --surface:#FFFCF8; --hover:#F3ECE3; --track:#F0E8DD;
+  --ink-1:#2E2433; --ink-2:#6E6172; --ink-3:#9C92A1;
+  --border:#EBE1D6; --border-soft:#F2EAE0;
+  --clay:#B9542F; --clay-press:#9C4426; --clay-dim:rgba(185,84,47,.10); --on-clay:#FFF9F4;
+  --sage:#5E8C63; --sage-dim:rgba(94,140,99,.14); --sage-deep:#3F6B45;
+  --dusk:#567A9B; --dusk-dim:rgba(86,122,155,.13); --dusk-deep:#3E5F7E;
+  --honey:#D9982B; --honey-dim:rgba(217,152,43,.16); --honey-deep:#8A5B0F;
+  --rose:#C24545; --rose-dim:rgba(194,69,69,.10); --rose-deep:#A03030;
+  --plum:#4E3A5C; --plum-dim:rgba(78,58,92,.12);
+  --mood-heavy:#4E3A5C; --mood-low:#567A9B; --mood-okay:#A5907C; --mood-good:#D9982B; --mood-light:#5E8C63;
+  --r-control:14px; --r-card:20px;
+  --sh-card:0 2px 16px rgba(76,54,44,.08);
+  --sh-sheet:0 -8px 40px rgba(46,36,51,.18);
+  --sh-fab:0 6px 20px rgba(185,84,47,.32);
+  --f-d:'Sentient',Georgia,serif; --f-u:'Author',system-ui,sans-serif;
+}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-font-smoothing:antialiased}
+html,body{width:100%;height:100%;background:#171219;display:flex;align-items:center;justify-content:center;overflow:hidden;font-family:var(--f-u)}
+b,strong{font-weight:600}
+button{font-family:var(--f-u);border:none;background:none;cursor:pointer;color:inherit}
+input,textarea{font-family:var(--f-u);color:var(--ink-1)}
+
+.phone{width:390px;height:844px;background:var(--paper);border-radius:32px;overflow:hidden;position:relative;flex-shrink:0;
+  box-shadow:0 50px 130px rgba(0,0,0,.65), inset 0 0 0 1px rgba(255,255,255,.05);
+  color:var(--ink-1);font-size:15px;line-height:1.4}
+
+/* ═══ screens ═══ */
+.screen{position:absolute;inset:0;display:none;flex-direction:column;background:var(--paper)}
+.screen.active{display:flex;animation:scrIn .34s cubic-bezier(.3,0,.2,1)}
+@keyframes scrIn{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+
+/* status bar */
+.sbar{height:50px;flex-shrink:0;display:flex;align-items:flex-end;justify-content:space-between;padding:0 28px 6px}
+.sbar .t{font-size:14px;font-weight:600;letter-spacing:.01em}
+.sbar svg{display:block}
+.home-ind{position:absolute;bottom:8px;left:50%;transform:translateX(-50%);width:134px;height:5px;border-radius:3px;background:rgba(46,36,51,.22);z-index:40;pointer-events:none}
+
+/* scroll body */
+.body{flex:1;overflow-y:auto;padding:0 20px;display:flex;flex-direction:column}
+.body::-webkit-scrollbar{display:none}
+
+/* onboarding chrome */
+.ob-top{display:flex;align-items:center;justify-content:space-between;padding:6px 20px 0;flex-shrink:0}
+.ob-back{width:40px;height:40px;border-radius:50%;background:var(--surface);box-shadow:var(--sh-card);display:flex;align-items:center;justify-content:center;color:var(--ink-2)}
+.ob-dots{display:flex;gap:5px}
+.ob-dots i{width:6px;height:6px;border-radius:50%;background:var(--track)}
+.ob-dots i.on{background:var(--clay);width:16px;border-radius:3px;transition:.22s}
+.ob-skip{font-size:13.5px;font-weight:500;color:var(--ink-3);width:40px;text-align:right}
+.ob-foot{padding:14px 20px 34px;flex-shrink:0;display:flex;flex-direction:column;gap:6px}
+
+.h-display{font-family:var(--f-d);font-weight:600;font-size:27px;line-height:1.22;letter-spacing:-.01em;color:var(--ink-1)}
+.h-sub{font-size:14.5px;line-height:1.55;color:var(--ink-2);margin-top:10px}
+.eyebrow{font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-3)}
+
+/* buttons */
+.btn{height:54px;width:100%;border-radius:var(--r-control);background:var(--clay);color:var(--on-clay);
+  font-size:15.5px;font-weight:600;display:flex;align-items:center;justify-content:center;gap:8px;transition:background .22s,opacity .22s}
+.btn:active{background:var(--clay-press)}
+.btn[disabled]{opacity:.4;pointer-events:none}
+.btn-quiet{background:var(--clay-dim);color:var(--clay)}
+.btn-ghost{background:transparent;color:var(--ink-2);height:46px;font-weight:500;font-size:14.5px}
+
+/* inputs */
+.field{display:flex;flex-direction:column;gap:7px;margin-bottom:16px}
+.field label{font-size:13px;font-weight:500;color:var(--ink-2)}
+.inp{height:50px;border-radius:var(--r-control);border:1.5px solid var(--border);background:var(--surface);
+  padding:0 16px;font-size:15px;outline:none;transition:border-color .18s,box-shadow .18s;width:100%}
+.inp:focus{border-color:var(--clay);box-shadow:0 0 0 3px var(--clay-dim)}
+.inp::placeholder{color:var(--ink-3)}
+
+/* cards */
+.card{background:var(--surface);border-radius:var(--r-card);box-shadow:var(--sh-card);padding:16px 18px}
+
+/* ═══ splash ═══ */
+#s-splash{background:var(--paper);align-items:center;justify-content:center}
+.sp-wrap{display:flex;flex-direction:column;align-items:center;gap:0}
+.sp-mark{width:120px;height:120px;position:relative}
+.sp-orb{position:absolute;left:50%;top:8px;width:19px;height:19px;margin-left:-9.5px;border-radius:50%;background:var(--honey);
+  animation:orbIn .9s .55s cubic-bezier(.2,.9,.25,1) both, breath 3.2s 1.9s ease-in-out infinite}
+.sp-glow{position:absolute;left:50%;top:-14px;width:64px;height:64px;margin-left:-32px;border-radius:50%;
+  background:radial-gradient(circle, rgba(217,152,43,.32), rgba(217,152,43,0) 68%);
+  animation:fadeIn .9s .8s both, breath 3.2s 1.9s ease-in-out infinite}
+@keyframes orbIn{from{opacity:0;transform:translateY(26px) scale(.4)}to{opacity:1;transform:none}}
+@keyframes breath{0%,100%{transform:scale(1)}50%{transform:scale(1.05)}}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+.sp-page{position:absolute;width:52px;height:66px;top:38px}
+.sp-page.l{left:8px;transform-origin:right center;animation:pageL .75s .12s cubic-bezier(.2,.9,.25,1) both}
+.sp-page.r{right:8px;transform-origin:left center;animation:pageR .75s .12s cubic-bezier(.2,.9,.25,1) both}
+@keyframes pageL{from{opacity:0;transform:scaleX(.15) translateX(20px)}to{opacity:1;transform:none}}
+@keyframes pageR{from{opacity:0;transform:scaleX(.15) translateX(-20px)}to{opacity:1;transform:none}}
+.sp-word{font-family:var(--f-d);font-size:31px;font-weight:600;letter-spacing:-.01em;color:var(--ink-1);margin-top:18px;
+  animation:riseIn .7s 1.05s cubic-bezier(.2,.9,.25,1) both}
+.sp-tag{font-family:var(--f-d);font-style:italic;font-size:15.5px;color:var(--ink-2);margin-top:8px;
+  animation:riseIn .7s 1.45s cubic-bezier(.2,.9,.25,1) both}
+@keyframes riseIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+
+/* ═══ intro ═══ */
+.in-hero{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:0 30px}
+.in-ring{position:relative;width:216px;height:216px;margin-bottom:38px}
+.in-ring .ring{position:absolute;inset:0;border-radius:50%;border:1.5px dashed #E0D2C2;animation:spin 60s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.in-av{position:absolute;width:52px;height:52px;border-radius:50%;overflow:hidden;box-shadow:var(--sh-card);animation:riseIn .6s both}
+.in-av svg{width:100%;height:100%;display:block}
+.in-center{position:absolute;left:50%;top:50%;width:84px;height:84px;transform:translate(-50%,-50%)}
+.in-center svg{width:100%;height:100%}
+
+/* ═══ auth / verify ═══ */
+.auth-head{padding:26px 20px 8px}
+.otp-row{display:flex;gap:12px;justify-content:center;margin:26px 0 10px}
+.otp{width:58px;height:64px;border-radius:var(--r-control);border:1.5px solid var(--border);background:var(--surface);
+  text-align:center;font-size:24px;font-weight:600;font-family:var(--f-d);outline:none;transition:.18s}
+.otp:focus{border-color:var(--clay);box-shadow:0 0 0 3px var(--clay-dim)}
+.link{color:var(--clay);font-weight:500}
+
+/* ═══ identity ═══ */
+.av-row{display:flex;gap:14px;overflow-x:auto;padding:8px 2px 14px}
+.av-row::-webkit-scrollbar{display:none}
+.av-pick{width:64px;height:64px;border-radius:50%;overflow:hidden;flex-shrink:0;position:relative;transition:transform .22s}
+.av-pick svg{width:100%;height:100%;display:block}
+.av-pick.on{outline:2.5px solid var(--clay);outline-offset:3px;transform:scale(1.06)}
+.name-sug{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+.sug{height:34px;padding:0 14px;border-radius:999px;border:1.5px solid var(--border);background:var(--surface);
+  font-size:13.5px;font-weight:500;color:var(--ink-2);display:flex;align-items:center;gap:6px}
+.sug.on{border-color:var(--clay);background:var(--clay-dim);color:var(--clay);font-weight:600}
+.privacy-note{display:flex;gap:10px;align-items:flex-start;background:var(--sage-dim);border-radius:var(--r-card);padding:13px 15px;font-size:13px;line-height:1.5;color:var(--sage-deep);margin-top:18px}
+.privacy-note svg{flex-shrink:0;margin-top:1px}
+
+/* ═══ guidelines ═══ */
+.rule{display:flex;gap:14px;align-items:flex-start;padding:15px 0;border-bottom:1px solid var(--border-soft)}
+.rule:last-child{border-bottom:none}
+.rule-ic{width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.rule b{display:block;font-size:15px;margin-bottom:2px}
+.rule p{font-size:13.5px;line-height:1.5;color:var(--ink-2)}
+.consent{display:flex;gap:12px;align-items:flex-start;margin-top:16px}
+.cbox{width:24px;height:24px;border-radius:8px;border:1.5px solid var(--border);background:var(--surface);flex-shrink:0;display:flex;align-items:center;justify-content:center;transition:.18s;margin-top:1px}
+.cbox.on{background:var(--clay);border-color:var(--clay);color:var(--on-clay)}
+.consent p{font-size:13px;line-height:1.55;color:var(--ink-2)}
+
+/* ═══ topics ═══ */
+.topics{display:flex;flex-wrap:wrap;gap:10px;padding-top:18px}
+.topic{height:44px;padding:0 18px;border-radius:999px;border:1.5px solid var(--border);background:var(--surface);
+  font-size:14.5px;font-weight:500;color:var(--ink-2);transition:.18s;display:flex;align-items:center}
+.topic.on{border-color:var(--clay);background:var(--clay-dim);color:var(--clay);font-weight:600}
+
+/* ═══ communities ═══ */
+.com-card{background:var(--surface);border-radius:var(--r-card);box-shadow:var(--sh-card);padding:16px 18px;margin-bottom:12px}
+.com-top{display:flex;gap:13px;align-items:center}
+.com-ic{width:44px;height:44px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.com-name{font-size:15.5px;font-weight:600}
+.com-meta{font-size:12.5px;color:var(--ink-3);margin-top:2px}
+.com-desc{font-size:13.5px;line-height:1.5;color:var(--ink-2);margin-top:10px}
+.com-join{height:38px;padding:0 18px;border-radius:999px;background:var(--clay-dim);color:var(--clay);font-size:13.5px;font-weight:600;flex-shrink:0;transition:.2s}
+.com-join.joined{background:var(--sage-dim);color:var(--sage-deep)}
+
+/* ═══ circle reveal ═══ */
+.cir-stage{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:0 30px}
+.cir-ring{position:relative;width:250px;height:250px;margin-bottom:34px}
+.cir-halo{position:absolute;inset:16px;border-radius:50%;background:radial-gradient(circle, rgba(217,152,43,.16), rgba(217,152,43,0) 70%);animation:breath 3.2s ease-in-out infinite}
+.cir-line{position:absolute;inset:28px;border-radius:50%;border:1.5px dashed #E0D2C2;animation:spin 70s linear infinite}
+.cir-me{position:absolute;left:50%;top:50%;width:74px;height:74px;margin:-37px 0 0 -37px;border-radius:50%;overflow:hidden;
+  box-shadow:0 4px 20px rgba(76,54,44,.2);animation:popIn .6s .2s cubic-bezier(.2,.9,.25,1) both}
+.cir-me svg{width:100%;height:100%}
+.cir-m{position:absolute;left:50%;top:50%;width:48px;height:48px;margin:-24px 0 0 -24px;border-radius:50%;overflow:hidden;box-shadow:var(--sh-card);animation:popIn .55s both}
+.cir-m svg{width:100%;height:100%}
+@keyframes popIn{from{opacity:0;transform:scale(.3) translate(var(--tx,0),var(--ty,0))}to{opacity:1;transform:scale(1) translate(var(--tx,0),var(--ty,0))}}
+.cir-badge{display:inline-flex;align-items:center;gap:6px;height:26px;padding:0 12px;border-radius:999px;background:var(--sage-dim);color:var(--sage-deep);font-size:12px;font-weight:500;margin-top:14px}
+
+/* ═══ check-in ═══ */
+.orbs{display:flex;justify-content:space-between;padding:30px 4px 6px}
+.orb-w{display:flex;flex-direction:column;align-items:center;gap:9px;width:60px}
+.orb{width:54px;height:54px;border-radius:50%;position:relative;transition:transform .25s;background:var(--track)}
+.orb i{position:absolute;inset:6px;border-radius:50%;opacity:.85}
+.orb-w span{font-family:var(--f-d);font-size:14px;font-weight:500;color:var(--ink-3);transition:.2s}
+.orb-w.on .orb{outline:2.5px solid var(--oc);outline-offset:3px;animation:breath 3.2s ease-in-out infinite}
+.orb-w.on span{color:var(--oc);font-weight:600}
+.note-inp{border-radius:var(--r-card);border:1.5px solid var(--border);background:var(--surface);min-height:110px;
+  padding:14px 16px;font-size:14.5px;line-height:1.6;outline:none;resize:none;width:100%;transition:.18s}
+.note-inp:focus{border-color:var(--clay);box-shadow:0 0 0 3px var(--clay-dim)}
+
+/* ═══ home ═══ */
+.greet{padding:14px 0 4px}
+.greet-row{display:flex;align-items:center;justify-content:space-between}
+.greet h1{font-family:var(--f-d);font-size:26px;font-weight:600;letter-spacing:-.01em;line-height:1.2}
+.greet .d{font-size:13px;color:var(--ink-3);margin-top:3px}
+.bell{width:42px;height:42px;border-radius:50%;background:var(--surface);box-shadow:var(--sh-card);display:flex;align-items:center;justify-content:center;color:var(--ink-2);position:relative}
+.bell .dot{position:absolute;top:11px;right:12px;width:7px;height:7px;border-radius:50%;background:var(--clay);border:1.5px solid var(--surface)}
+.mood-today{display:flex;align-items:center;gap:12px;margin-top:16px}
+.mt-orb{width:40px;height:40px;border-radius:50%;background:var(--honey-dim);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.mt-orb i{width:22px;height:22px;border-radius:50%;background:radial-gradient(circle at 38% 32%, #E8B04B, var(--mood-okay))}
+.compose-card{display:flex;align-items:center;gap:12px;margin-top:12px;cursor:pointer}
+.compose-card .av{width:38px;height:38px;border-radius:50%;overflow:hidden;flex-shrink:0}
+.compose-card .av svg{width:100%;height:100%}
+.compose-hint{flex:1;font-family:var(--f-d);font-style:italic;font-size:15px;color:var(--ink-3)}
+.sec-head{display:flex;align-items:baseline;justify-content:space-between;margin:26px 0 10px}
+.sec-head .link{font-size:13px}
+.post{margin-bottom:12px}
+.post-top{display:flex;align-items:center;gap:10px}
+.post .av{width:36px;height:36px;border-radius:50%;overflow:hidden;flex-shrink:0}
+.post .av svg{width:100%;height:100%}
+.post-who{font-size:14px;font-weight:600}
+.post-when{font-size:12px;color:var(--ink-3);margin-top:1px}
+.pill{display:inline-flex;align-items:center;height:22px;padding:0 10px;border-radius:999px;font-size:11.5px;font-weight:500;margin-left:auto;flex-shrink:0}
+.post-txt{font-size:14.5px;line-height:1.6;color:var(--ink-1);margin-top:10px}
+.post-acts{display:flex;gap:18px;margin-top:12px;padding-top:11px;border-top:1px solid var(--border-soft)}
+.pact{display:flex;align-items:center;gap:6px;font-size:12.5px;font-weight:500;color:var(--ink-2)}
+.pact.enc.on{color:var(--clay)}
+.guide-tag{display:inline-flex;align-items:center;height:18px;padding:0 8px;border-radius:999px;background:var(--sage-dim);color:var(--sage-deep);font-size:10.5px;font-weight:600;margin-left:6px}
+.hscroll{display:flex;gap:12px;overflow-x:auto;padding:2px 20px 8px;margin:0 -20px}
+.hscroll::-webkit-scrollbar{display:none}
+.mini-com{min-width:200px;flex-shrink:0}
+.rise>*{animation:riseIn .5s both}
+.rise>*:nth-child(1){animation-delay:.05s}.rise>*:nth-child(2){animation-delay:.12s}
+.rise>*:nth-child(3){animation-delay:.19s}.rise>*:nth-child(4){animation-delay:.26s}
+.rise>*:nth-child(5){animation-delay:.33s}.rise>*:nth-child(6){animation-delay:.4s}
+
+/* bottom nav */
+.nav{flex-shrink:0;background:var(--surface);border-top:1px solid var(--border-soft);display:grid;grid-template-columns:1fr 1fr 76px 1fr 1fr;padding:6px 8px 22px;position:relative}
+.ntab{display:flex;flex-direction:column;align-items:center;gap:3px;padding:7px 0 0;font-size:10.5px;font-weight:500;color:var(--ink-3)}
+.ntab.on{color:var(--clay);font-weight:600}
+.nfab{position:relative;display:flex;align-items:flex-start;justify-content:center}
+.nfab button{width:52px;height:52px;border-radius:50%;background:var(--clay);color:var(--on-clay);box-shadow:var(--sh-fab);
+  display:flex;align-items:center;justify-content:center;margin-top:-14px;transition:transform .2s}
+.nfab button:active{transform:scale(.92)}
+
+/* ═══ sheets ═══ */
+.sheet-wrap{position:absolute;inset:0;z-index:60;display:none}
+.sheet-wrap.open{display:block}
+.sheet-ovl{position:absolute;inset:0;background:rgba(33,27,38,.5);opacity:0;transition:opacity .3s}
+.sheet-wrap.open .sheet-ovl{opacity:1}
+.sheet{position:absolute;left:0;right:0;bottom:0;background:var(--surface);border-radius:24px 24px 0 0;box-shadow:var(--sh-sheet);
+  padding:8px 20px 34px;transform:translateY(100%);transition:transform .3s cubic-bezier(.2,.9,.25,1);max-height:88%;overflow-y:auto}
+.sheet-wrap.open .sheet{transform:none}
+.drag{width:36px;height:4px;border-radius:2px;background:var(--track);margin:6px auto 16px}
+.sheet-h{font-family:var(--f-d);font-size:21px;font-weight:600;letter-spacing:-.01em;line-height:1.25}
+.sheet-s{font-size:13.5px;color:var(--ink-2);margin-top:6px;line-height:1.5}
+.role-opt{display:flex;gap:14px;align-items:flex-start;border:1.5px solid var(--border);border-radius:var(--r-card);padding:16px;margin-top:12px;transition:.18s;cursor:pointer;background:var(--surface)}
+.role-opt.on{border-color:var(--clay);background:var(--clay-dim)}
+.role-ic{width:42px;height:42px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.role-opt b{display:block;font-size:15px;margin-bottom:3px}
+.role-opt p{font-size:13px;line-height:1.5;color:var(--ink-2)}
+.purpose{display:flex;gap:13px;align-items:center;padding:13px 4px;border-bottom:1px solid var(--border-soft);cursor:pointer}
+.purpose:last-of-type{border-bottom:none}
+.purpose-ic{width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.purpose b{font-size:14.5px}
+.purpose p{font-size:12.5px;color:var(--ink-3);margin-top:1px}
+.aud{display:flex;gap:6px;background:var(--track);border-radius:999px;padding:4px;margin-top:14px}
+.aud button{flex:1;height:36px;border-radius:999px;font-size:13px;font-weight:500;color:var(--ink-2)}
+.aud button.on{background:var(--surface);color:var(--clay);font-weight:600;box-shadow:var(--sh-card)}
+.as-note{display:flex;align-items:center;gap:8px;margin-top:14px;font-size:12.5px;color:var(--ink-3)}
+.as-note .av{width:24px;height:24px;border-radius:50%;overflow:hidden}
+.as-note .av svg{width:100%;height:100%}
+
+/* toast */
+#toast{position:absolute;top:60px;left:0;right:0;display:flex;justify-content:center;z-index:80;pointer-events:none}
+.toast{display:inline-flex;align-items:center;gap:8px;border-radius:999px;padding:9px 18px;font-size:13px;font-weight:500;
+  box-shadow:0 6px 24px rgba(46,36,51,.16);opacity:0;transform:translateY(-14px);transition:.28s}
+.toast.in{opacity:1;transform:none}
+.toast.sage{background:#E8F1E8;color:var(--sage-deep)}
+.toast.honey{background:#FAF0DC;color:var(--honey-deep)}
+</style>
+</head>
+<body>
+<div class="phone" id="phone">
+
+  <!-- ══ SPLASH ══ -->
+  <div class="screen active" id="s-splash">
+    <div class="sp-wrap" style="flex:1;justify-content:center">
+      <div class="sp-mark">
+        <div class="sp-glow"></div><div class="sp-orb"></div>
+        <svg class="sp-page l" viewBox="0 0 52 66" fill="none"><path d="M52 8C40.5 1 18.5-.5 4.5 4.5 1.8 5.5 0 7.8 0 10.6v46c0 4 4 6.7 7.8 5.5C20.5 58 40 60 52 66V8Z" fill="#B9542F"/></svg>
+        <svg class="sp-page r" viewBox="0 0 52 66" fill="none"><path d="M0 8C11.5 1 33.5-.5 47.5 4.5c2.7 1 4.5 3.3 4.5 6.1v46c0 4-4 6.7-7.8 5.5C31.5 58 12 60 0 66V8Z" fill="#2E2433"/></svg>
+      </div>
+      <div class="sp-word">mindbook</div>
+      <div class="sp-tag">Do life alone? Nah.</div>
+    </div>
+    <div class="home-ind"></div>
+  </div>
+
+  <!-- ══ INTRO ══ -->
+  <div class="screen" id="s-intro">
+    <div class="sbar" data-sb></div>
+    <div class="in-hero">
+      <div class="in-ring">
+        <div class="ring"></div>
+        <div class="in-av" style="left:6px;top:26px;animation-delay:.15s" data-av="1"></div>
+        <div class="in-av" style="right:-2px;top:52px;animation-delay:.3s" data-av="2"></div>
+        <div class="in-av" style="left:38px;bottom:-6px;animation-delay:.45s" data-av="3"></div>
+        <div class="in-av" style="right:34px;bottom:14px;animation-delay:.6s" data-av="4"></div>
+        <div class="in-av" style="left:88px;top:-16px;animation-delay:.75s" data-av="5"></div>
+        <div class="in-center"><svg viewBox="0 0 64 64" fill="none"><circle cx="32" cy="14.5" r="5" fill="#D9982B"/><path d="M32 26.5C28.2 23 21.4 22.4 16.5 24.1c-1 .35-1.5 1.1-1.5 2.05v18.1c0 1.35 1.35 2.2 2.6 1.8 4.5-1.45 10.6-.75 14.4 2.75V26.5Z" fill="#B9542F"/><path d="M32 26.5c3.8-3.5 10.6-4.1 15.5-2.4 1 .35 1.5 1.1 1.5 2.05v18.1c0 1.35-1.35 2.2-2.6 1.8-4.5-1.45-10.6-.75-14.4 2.75V26.5Z" fill="#2E2433"/></svg></div>
+      </div>
+      <div class="h-display" style="font-size:30px">Life is heavy sometimes.<br/>Carry it together.</div>
+      <div class="h-sub" style="max-width:290px">A safe, anonymous space to share, heal, grow, and support others through life's challenges.</div>
+    </div>
+    <div class="ob-foot">
+      <button class="btn" onclick="goTo('s-auth')">Get started</button>
+      <button class="btn-ghost" onclick="toast('Sign-in designed in the next flow','honey')">I already have an account</button>
+    </div>
+    <div class="home-ind"></div>
+  </div>
+
+  <!-- ══ AUTH ══ -->
+  <div class="screen" id="s-auth">
+    <div class="sbar" data-sb></div>
+    <div class="ob-top"><button class="ob-back" onclick="goTo('s-intro')" data-ic="back"></button>
+      <div class="ob-dots"><i class="on"></i><i></i><i></i><i></i><i></i></div><span class="ob-skip"></span></div>
+    <div class="body">
+      <div class="auth-head" style="padding:20px 0 22px">
+        <div class="h-display">Create your account</div>
+        <div class="h-sub">Just an email and password. Your account details are never shown to anyone.</div>
+      </div>
+      <div class="field"><label>Email address</label><input class="inp" type="email" placeholder="you@example.com" value="chidera.o@gmail.com"/></div>
+      <div class="field"><label>Password</label><input class="inp" type="password" placeholder="At least 8 characters" value="••••••••••"/></div>
+    </div>
+    <div class="ob-foot">
+      <button class="btn" onclick="goTo('s-verify')">Continue</button>
+      <div style="font-size:12px;color:var(--ink-3);text-align:center;line-height:1.5;padding:0 12px">By continuing you agree to our Terms of Service and Privacy Policy.</div>
+    </div>
+    <div class="home-ind"></div>
+  </div>
+
+  <!-- ══ VERIFY ══ -->
+  <div class="screen" id="s-verify">
+    <div class="sbar" data-sb></div>
+    <div class="ob-top"><button class="ob-back" onclick="goTo('s-auth')" data-ic="back"></button>
+      <div class="ob-dots"><i class="on"></i><i></i><i></i><i></i><i></i></div><span class="ob-skip"></span></div>
+    <div class="body">
+      <div class="auth-head" style="padding:20px 0 0">
+        <div class="h-display">Check your inbox</div>
+        <div class="h-sub">We sent a 4-digit code to <b>chidera.o@gmail.com</b></div>
+      </div>
+      <div class="otp-row">
+        <input class="otp" maxlength="1" inputmode="numeric"/><input class="otp" maxlength="1" inputmode="numeric"/>
+        <input class="otp" maxlength="1" inputmode="numeric"/><input class="otp" maxlength="1" inputmode="numeric"/>
+      </div>
+      <div style="text-align:center;font-size:13px;color:var(--ink-3)">Nothing yet? <span class="link" onclick="toast('Code re-sent','sage')">Resend code</span></div>
+    </div>
+    <div class="ob-foot"><button class="btn" id="verify-btn" disabled onclick="goTo('s-identity')">Verify</button></div>
+    <div class="home-ind"></div>
+  </div>
+
+  <!-- ══ IDENTITY ══ -->
+  <div class="screen" id="s-identity">
+    <div class="sbar" data-sb></div>
+    <div class="ob-top"><button class="ob-back" onclick="goTo('s-verify')" data-ic="back"></button>
+      <div class="ob-dots"><i></i><i class="on"></i><i></i><i></i><i></i></div><span class="ob-skip"></span></div>
+    <div class="body">
+      <div style="padding:20px 0 4px">
+        <div class="h-display">Choose who you'll be here</div>
+        <div class="h-sub">Pick a face and a name. This is all anyone ever sees of you.</div>
+      </div>
+      <div class="eyebrow" style="margin:22px 0 4px">Your face here</div>
+      <div class="av-row" id="av-row"></div>
+      <div class="eyebrow" style="margin:10px 0 8px">Your name here</div>
+      <input class="inp" id="name-inp" value="QuietRiver" style="font-family:var(--f-d);font-size:17px;font-weight:500"/>
+      <div class="name-sug" id="name-sug"></div>
+      <div class="privacy-note">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="10" width="16" height="11" rx="2.5"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg>
+        <span>Your real name, email and identity are never visible to other members. Only <b id="pn-name">QuietRiver</b> shows up in the app.</span>
+      </div>
+    </div>
+    <div class="ob-foot"><button class="btn" onclick="goTo('s-guidelines')">This is me</button></div>
+    <div class="home-ind"></div>
+  </div>
+
+  <!-- ══ GUIDELINES ══ -->
+  <div class="screen" id="s-guidelines">
+    <div class="sbar" data-sb></div>
+    <div class="ob-top"><button class="ob-back" onclick="goTo('s-identity')" data-ic="back"></button>
+      <div class="ob-dots"><i></i><i></i><i class="on"></i><i></i><i></i></div><span class="ob-skip"></span></div>
+    <div class="body">
+      <div style="padding:20px 0 8px">
+        <div class="h-display">House rules</div>
+        <div class="h-sub">Mindbook stays safe because everyone holds these.</div>
+      </div>
+      <div class="card" style="margin-top:14px;padding:6px 18px">
+        <div class="rule"><span class="rule-ic" style="background:var(--clay-dim);color:var(--clay)"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20.5s-7.5-4.7-9.3-9.6C1.3 7 4 4 7.2 4c2 0 3.8 1.1 4.8 2.7C13 5.1 14.8 4 16.8 4 20 4 22.7 7 21.3 10.9c-1.8 4.9-9.3 9.6-9.3 9.6Z"/></svg></span>
+          <div><b>Kindness first</b><p>Encourage, never mock. Everyone here is carrying something.</p></div></div>
+        <div class="rule"><span class="rule-ic" style="background:var(--dusk-dim);color:var(--dusk-deep)"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3.5-6.5 10-6.5S22 12 22 12s-3.5 6.5-10 6.5S2 12 2 12Z"/><circle cx="12" cy="12" r="3"/><path d="M4 4l16 16" /></svg></span>
+          <div><b>No judgment</b><p>People share hard things. Meet them with care, not opinions.</p></div></div>
+        <div class="rule"><span class="rule-ic" style="background:var(--plum-dim);color:var(--plum)"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="10" width="16" height="11" rx="2.5"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg></span>
+          <div><b>Privacy is sacred</b><p>What is shared in a Circle stays in the Circle. No screenshots, no outing.</p></div></div>
+        <div class="rule"><span class="rule-ic" style="background:var(--sage-dim);color:var(--sage-deep)"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v4M12 17v4M3 12h4M17 12h4"/><circle cx="12" cy="12" r="4.5"/></svg></span>
+          <div><b>Support, not treatment</b><p>Mindbook complements professional care, it never replaces it. In crisis, help is one tap away.</p></div></div>
+      </div>
+      <div class="consent" onclick="toggleConsent()">
+        <span class="cbox" id="cbox"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" style="display:none" id="ctick"><polyline points="20 6 9 17 4 12"/></svg></span>
+        <p>I accept the <span class="link">Community Guidelines</span>, <span class="link">Privacy Policy</span> and <span class="link">Terms</span>. I understand my emotional data stays private to me.</p>
+      </div>
+    </div>
+    <div class="ob-foot"><button class="btn" id="agree-btn" disabled onclick="goTo('s-topics')">I'll hold these</button></div>
+    <div class="home-ind"></div>
+  </div>
+
+  <!-- ══ TOPICS ══ -->
+  <div class="screen" id="s-topics">
+    <div class="sbar" data-sb></div>
+    <div class="ob-top"><button class="ob-back" onclick="goTo('s-guidelines')" data-ic="back"></button>
+      <div class="ob-dots"><i></i><i></i><i></i><i class="on"></i><i></i></div><span class="ob-skip" onclick="goTo('s-communities')">Skip</span></div>
+    <div class="body">
+      <div style="padding:20px 0 0">
+        <div class="h-display">What would you like support with?</div>
+        <div class="h-sub">Pick as many as you like. You can change these anytime.</div>
+      </div>
+      <div class="topics" id="topics"></div>
+    </div>
+    <div class="ob-foot"><button class="btn" id="topics-btn" disabled onclick="goTo('s-communities')">Continue</button></div>
+    <div class="home-ind"></div>
+  </div>
+
+  <!-- ══ COMMUNITIES ══ -->
+  <div class="screen" id="s-communities">
+    <div class="sbar" data-sb></div>
+    <div class="ob-top"><button class="ob-back" onclick="goTo('s-topics')" data-ic="back"></button>
+      <div class="ob-dots"><i></i><i></i><i></i><i></i><i class="on"></i></div><span class="ob-skip" onclick="goTo('s-checkin')">Skip</span></div>
+    <div class="body">
+      <div style="padding:20px 0 16px">
+        <div class="h-display">Rooms for you</div>
+        <div class="h-sub">Based on what you chose. Join one or a few; we'll place you in a small Circle inside.</div>
+      </div>
+      <div class="com-card">
+        <div class="com-top">
+          <span class="com-ic" style="background:var(--dusk-dim);color:var(--dusk-deep)"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3c-2 3.5-6.5 5-6.5 10a6.5 6.5 0 0 0 13 0C18.5 8 14 6.5 12 3Z"/></svg></span>
+          <div style="flex:1"><div class="com-name">Anxiety Support</div><div class="com-meta">2,140 members · 61 Circles</div></div>
+          <button class="com-join" onclick="openRole(this,'Anxiety Support')">Join</button>
+        </div>
+        <div class="com-desc">For racing minds and heavy chests. Practical calm, shared honestly.</div>
+      </div>
+      <div class="com-card">
+        <div class="com-top">
+          <span class="com-ic" style="background:var(--honey-dim);color:var(--honey-deep)"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="7" width="18" height="13" rx="2.5"/><path d="M8 7V5.5A1.5 1.5 0 0 1 9.5 4h5A1.5 1.5 0 0 1 16 5.5V7"/></svg></span>
+          <div style="flex:1"><div class="com-name">School &amp; Career Pressure</div><div class="com-meta">1,872 members · 54 Circles</div></div>
+          <button class="com-join" onclick="openRole(this,'School &amp; Career Pressure')">Join</button>
+        </div>
+        <div class="com-desc">Exams, job hunting, NYSC, the pressure to have it all figured out.</div>
+      </div>
+      <div class="com-card">
+        <div class="com-top">
+          <span class="com-ic" style="background:var(--rose-dim);color:var(--rose-deep)"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20.5s-7.5-4.7-9.3-9.6C1.3 7 4 4 7.2 4c2 0 3.8 1.1 4.8 2.7C13 5.1 14.8 4 16.8 4 20 4 22.7 7 21.3 10.9c-1.8 4.9-9.3 9.6-9.3 9.6Z"/></svg></span>
+          <div style="flex:1"><div class="com-name">Loneliness</div><div class="com-meta">1,205 members · 38 Circles</div></div>
+          <button class="com-join" onclick="openRole(this,'Loneliness')">Join</button>
+        </div>
+        <div class="com-desc">For when the city is loud but you feel unseen. You are not the only one.</div>
+      </div>
+    </div>
+    <div class="ob-foot"><button class="btn" id="com-btn" disabled onclick="goTo('s-circle')">Continue</button></div>
+    <div class="home-ind"></div>
+  </div>
+
+  <!-- ══ CIRCLE REVEAL ══ -->
+  <div class="screen" id="s-circle">
+    <div class="sbar" data-sb></div>
+    <div class="cir-stage">
+      <div class="cir-ring">
+        <div class="cir-halo"></div><div class="cir-line"></div>
+        <div class="cir-me" data-av="0"></div>
+        <div class="cir-m" style="--tx:0px;--ty:-101px;animation-delay:.45s" data-av="1"></div>
+        <div class="cir-m" style="--tx:88px;--ty:-50px;animation-delay:.6s" data-av="2"></div>
+        <div class="cir-m" style="--tx:88px;--ty:50px;animation-delay:.75s" data-av="3"></div>
+        <div class="cir-m" style="--tx:0px;--ty:101px;animation-delay:.9s" data-av="4"></div>
+        <div class="cir-m" style="--tx:-88px;--ty:50px;animation-delay:1.05s" data-av="5"></div>
+        <div class="cir-m" style="--tx:-88px;--ty:-50px;animation-delay:1.2s" data-av="6"></div>
+      </div>
+      <div class="eyebrow" style="animation:riseIn .6s 1.3s both">Anxiety Support</div>
+      <div class="h-display" style="margin-top:6px;animation:riseIn .6s 1.4s both">Meet your Circle</div>
+      <div class="h-sub" style="max-width:280px;animation:riseIn .6s 1.5s both">Seven people, small on purpose. Some are seeking support like you; some have been where you are.</div>
+      <span class="cir-badge" style="animation:riseIn .6s 1.6s both">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+        Includes StillWaters, a verified Guide</span>
+    </div>
+    <div class="ob-foot"><button class="btn" onclick="goTo('s-checkin')">Continue</button></div>
+    <div class="home-ind"></div>
+  </div>
+
+  <!-- ══ CHECK-IN ══ -->
+  <div class="screen" id="s-checkin">
+    <div class="sbar" data-sb></div>
+    <div class="body">
+      <div style="padding:34px 0 0;text-align:center">
+        <div class="eyebrow">First check-in</div>
+        <div class="h-display" style="font-size:30px;margin-top:10px">How are you, really?</div>
+        <div class="h-sub">No wrong answers. Only you can see this.</div>
+      </div>
+      <div class="orbs" id="orbs"></div>
+      <div class="eyebrow" style="margin:26px 0 8px">Want to say more? <span style="text-transform:none;letter-spacing:0;font-weight:400;color:var(--ink-3)">(optional, private)</span></div>
+      <textarea class="note-inp" placeholder="Whatever is on your mind..."></textarea>
+    </div>
+    <div class="ob-foot"><button class="btn" id="checkin-btn" disabled onclick="finishCheckin()">Save my check-in</button></div>
+    <div class="home-ind"></div>
+  </div>
+
+  <!-- ══ HOME ══ -->
+  <div class="screen" id="s-home">
+    <div class="sbar" data-sb></div>
+    <div class="body rise">
+      <div class="greet">
+        <div class="greet-row">
+          <div><h1>Good evening,<br/>QuietRiver</h1><div class="d">Tuesday 14 July</div></div>
+          <button class="bell" onclick="toast('Notifications designed in the next flow','honey')"><span class="dot"></span>
+            <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M18 9a6 6 0 0 0-12 0c0 6-2.5 7.5-2.5 7.5h17S18 15 18 9Z"/><path d="M10 20a2.2 2.2 0 0 0 4 0"/></svg></button>
+        </div>
+      </div>
+      <div class="card mood-today">
+        <span class="mt-orb"><i></i></span>
+        <div style="flex:1"><b style="font-size:14.5px">Checked in · feeling <span style="font-family:var(--f-d);color:var(--honey-deep)" id="home-mood">Okay</span></b>
+          <div style="font-size:12.5px;color:var(--ink-3);margin-top:2px">Day 1 of your journal</div></div>
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#9C92A1" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+      </div>
+      <div class="card compose-card" onclick="openComposer()">
+        <span class="av" data-av="0"></span>
+        <span class="compose-hint">What's going on with you today?</span>
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#B9542F" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>
+      </div>
+      <div class="sec-head"><span class="eyebrow">Your Circle · Anxiety Support</span><span class="link" onclick="toast('Circle space designed in the next flow','honey')">Open</span></div>
+      <div class="card post">
+        <div class="post-top">
+          <span class="av" data-av="6"></span>
+          <div style="flex:1"><span class="post-who">StillWaters<span class="guide-tag">Guide</span></span><div class="post-when">2h ago · to your Circle</div></div>
+          <span class="pill" style="background:var(--sage-dim);color:var(--sage-deep)">Encouragement</span>
+        </div>
+        <div class="post-txt">Welcome QuietRiver. This Circle is a soft place to land. Share when you're ready, read quietly when you're not. Both count.</div>
+        <div class="post-acts">
+          <button class="pact enc" onclick="encourage(this)"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20.5s-7.5-4.7-9.3-9.6C1.3 7 4 4 7.2 4c2 0 3.8 1.1 4.8 2.7C13 5.1 14.8 4 16.8 4 20 4 22.7 7 21.3 10.9c-1.8 4.9-9.3 9.6-9.3 9.6Z"/></svg><span>4</span></button>
+          <button class="pact" onclick="toast('Replies designed in the next flow','honey')"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.4 8.4 0 0 1-9 8.4 8.9 8.9 0 0 1-3.9-.9L3 20l1-4.9a8.4 8.4 0 1 1 17-3.6Z"/></svg><span>Reply</span></button>
+        </div>
+      </div>
+      <div class="card post">
+        <div class="post-top">
+          <span class="av" data-av="3"></span>
+          <div style="flex:1"><span class="post-who">SteadyOak</span><div class="post-when">5h ago · to your Circle</div></div>
+          <span class="pill" style="background:var(--plum-dim);color:var(--plum)">My Story</span>
+        </div>
+        <div class="post-txt">Two years ago I couldn't sit through a lecture without my chest tightening. Last week I gave a presentation to forty people. Slow is still forward.</div>
+        <div class="post-acts">
+          <button class="pact enc" onclick="encourage(this)"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20.5s-7.5-4.7-9.3-9.6C1.3 7 4 4 7.2 4c2 0 3.8 1.1 4.8 2.7C13 5.1 14.8 4 16.8 4 20 4 22.7 7 21.3 10.9c-1.8 4.9-9.3 9.6-9.3 9.6Z"/></svg><span>11</span></button>
+          <button class="pact" onclick="toast('Replies designed in the next flow','honey')"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.4 8.4 0 0 1-9 8.4 8.9 8.9 0 0 1-3.9-.9L3 20l1-4.9a8.4 8.4 0 1 1 17-3.6Z"/></svg><span>Reply</span></button>
+        </div>
+      </div>
+      <div class="sec-head"><span class="eyebrow">More rooms</span><span class="link" onclick="toast('Browse designed in the next flow','honey')">Browse</span></div>
+      <div class="hscroll">
+        <div class="card mini-com">
+          <span class="com-ic" style="background:var(--honey-dim);color:var(--honey-deep);width:38px;height:38px"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="7" width="18" height="13" rx="2.5"/><path d="M8 7V5.5A1.5 1.5 0 0 1 9.5 4h5A1.5 1.5 0 0 1 16 5.5V7"/></svg></span>
+          <div class="com-name" style="margin-top:10px;font-size:14.5px">School &amp; Career Pressure</div>
+          <div class="com-meta">1,872 members</div>
+        </div>
+        <div class="card mini-com">
+          <span class="com-ic" style="background:var(--sage-dim);color:var(--sage-deep);width:38px;height:38px"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21c4.5-2.5 7-6.2 7-10.5V6l-7-3-7 3v4.5C5 14.8 7.5 18.5 12 21Z"/></svg></span>
+          <div class="com-name" style="margin-top:10px;font-size:14.5px">Faith</div>
+          <div class="com-meta">980 members</div>
+        </div>
+        <div class="card mini-com">
+          <span class="com-ic" style="background:var(--dusk-dim);color:var(--dusk-deep);width:38px;height:38px"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8" r="3.2"/><path d="M3.5 20c.6-3.5 2.8-5.5 5.5-5.5s4.9 2 5.5 5.5"/><circle cx="17" cy="9" r="2.6"/><path d="M15.5 14.8c2.3.3 4 2 4.5 4.7"/></svg></span>
+          <div class="com-name" style="margin-top:10px;font-size:14.5px">Relationships</div>
+          <div class="com-meta">2,431 members</div>
+        </div>
+      </div>
+      <div style="height:16px;flex-shrink:0"></div>
+    </div>
+    <nav class="nav">
+      <button class="ntab on"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 10.5 12 4l8 6.5V20a1.5 1.5 0 0 1-1.5 1.5h-13A1.5 1.5 0 0 1 4 20Z"/><path d="M9.5 21.5v-7h5v7"/></svg>Home</button>
+      <button class="ntab" onclick="toast('Communities designed in the next flow','honey')"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8" r="3.2"/><path d="M3.5 20c.6-3.5 2.8-5.5 5.5-5.5s4.9 2 5.5 5.5"/><circle cx="17" cy="9" r="2.6"/><path d="M15.5 14.8c2.3.3 4 2 4.5 4.7"/></svg>Rooms</button>
+      <span class="nfab"><button onclick="openComposer()"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg></button></span>
+      <button class="ntab" onclick="toast('Circle space designed in the next flow','honey')"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8.5" stroke-dasharray="3.6 3.4"/><circle cx="12" cy="12" r="3.4"/></svg>My Circle</button>
+      <button class="ntab" onclick="toast('Profile designed in the next flow','honey')"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="3.6"/><path d="M5 20.5c.8-4 3.6-6 7-6s6.2 2 7 6"/></svg>Profile</button>
+    </nav>
+    <div class="home-ind" style="background:rgba(46,36,51,.3)"></div>
+  </div>
+
+  <!-- ══ ROLE SHEET ══ -->
+  <div class="sheet-wrap" id="sheet-role">
+    <div class="sheet-ovl" onclick="closeSheet('sheet-role')"></div>
+    <div class="sheet">
+      <div class="drag"></div>
+      <div class="sheet-h">What brings you to <span id="role-com">Anxiety Support</span> today?</div>
+      <div class="sheet-s">This helps us balance your Circle. You can change it anytime.</div>
+      <div class="role-opt" onclick="pickRole(this)">
+        <span class="role-ic" style="background:var(--dusk-dim);color:var(--dusk-deep)"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21c4.5-2.5 7-6.2 7-10.5V6l-7-3-7 3v4.5C5 14.8 7.5 18.5 12 21Z"/></svg></span>
+        <div><b>Seeking support</b><p>I'm going through this right now and would like people who understand.</p></div>
+      </div>
+      <div class="role-opt" onclick="pickRole(this)">
+        <span class="role-ic" style="background:var(--sage-dim);color:var(--sage-deep)"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20.5s-7.5-4.7-9.3-9.6C1.3 7 4 4 7.2 4c2 0 3.8 1.1 4.8 2.7C13 5.1 14.8 4 16.8 4 20 4 22.7 7 21.3 10.9c-1.8 4.9-9.3 9.6-9.3 9.6Z"/></svg></span>
+        <div><b>Supporting others</b><p>I've been through something similar and want to encourage others.</p></div>
+      </div>
+      <button class="btn" id="role-btn" disabled style="margin-top:18px" onclick="confirmRole()">Join this room</button>
+    </div>
+  </div>
+
+  <!-- ══ COMPOSER SHEET ══ -->
+  <div class="sheet-wrap" id="sheet-compose">
+    <div class="sheet-ovl" onclick="closeSheet('sheet-compose')"></div>
+    <div class="sheet">
+      <div class="drag"></div>
+      <div id="comp-1">
+        <div class="sheet-h">What's going on with you today?</div>
+        <div class="sheet-s">Start with why you're sharing.</div>
+        <div style="margin-top:8px">
+          <div class="purpose" onclick="pickPurpose('I need support','rose')"><span class="purpose-ic" style="background:var(--rose-dim);color:var(--rose-deep)"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21c4.5-2.5 7-6.2 7-10.5V6l-7-3-7 3v4.5C5 14.8 7.5 18.5 12 21Z"/></svg></span><div><b>I need support</b><p>Something is heavy and I don't want to carry it alone</p></div></div>
+          <div class="purpose" onclick="pickPurpose('I need advice','dusk')"><span class="purpose-ic" style="background:var(--dusk-dim);color:var(--dusk-deep)"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M9.2 9a2.8 2.8 0 0 1 5.5.7c0 1.8-2.7 2.3-2.7 3.8"/><path d="M12 17h.01"/></svg></span><div><b>I need advice</b><p>I'd like perspectives from people who've been here</p></div></div>
+          <div class="purpose" onclick="pickPurpose('I want to encourage someone','sage')"><span class="purpose-ic" style="background:var(--sage-dim);color:var(--sage-deep)"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20.5s-7.5-4.7-9.3-9.6C1.3 7 4 4 7.2 4c2 0 3.8 1.1 4.8 2.7C13 5.1 14.8 4 16.8 4 20 4 22.7 7 21.3 10.9c-1.8 4.9-9.3 9.6-9.3 9.6Z"/></svg></span><div><b>I want to encourage someone</b><p>Words for whoever needs them today</p></div></div>
+          <div class="purpose" onclick="pickPurpose('I want to share my story','plum')"><span class="purpose-ic" style="background:var(--plum-dim);color:var(--plum)"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5V6a2 2 0 0 1 2-2h14v14H6.5A2.5 2.5 0 0 0 4 19.5Z"/><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20v3.5H6.5A2.5 2.5 0 0 1 4 19.5Z"/></svg></span><div><b>I want to share my story</b><p>Where I've been, for whoever is there now</p></div></div>
+          <div class="purpose" onclick="pickPurpose('Prayer request','honey')"><span class="purpose-ic" style="background:var(--honey-dim);color:var(--honey-deep)"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3c1.2 3.6 1.2 6.8 0 9.5C10.8 9.8 10.8 6.6 12 3Z"/><path d="M12 12.5c2 2.4 3 5 3 8.5-2.4-.8-4.6-2.4-3-8.5ZM12 12.5c-2 2.4-3 5-3 8.5 2.4-.8 4.6-2.4 3-8.5Z"/></svg></span><div><b>Prayer request</b><p>Ask your room to stand with you</p></div></div>
+        </div>
+      </div>
+      <div id="comp-2" style="display:none">
+        <div class="sheet-h" id="comp-purpose-h">I need support</div>
+        <textarea class="note-inp" style="margin-top:14px" id="comp-txt" placeholder="Say it how it is. No polishing needed."></textarea>
+        <div class="eyebrow" style="margin:16px 0 0">Who sees this</div>
+        <div class="aud">
+          <button class="on" onclick="pickAud(this)">My Circle</button>
+          <button onclick="pickAud(this)">Community</button>
+          <button onclick="pickAud(this)">Moderators only</button>
+        </div>
+        <div class="as-note"><span class="av" data-av="0"></span>Posting as <b style="color:var(--ink-2)">QuietRiver</b> · your real identity stays yours</div>
+        <button class="btn" style="margin-top:16px" onclick="sharePost()">Share</button>
+        <button class="btn-ghost" style="width:100%" onclick="backToPurpose()">Back</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="toast"></div>
+</div>
+
+<script>
+/* ── avatars: abstract warm generative patterns ── */
+const AVS = [
+  `<svg viewBox="0 0 64 64"><rect width="64" height="64" fill="#B9542F"/><circle cx="32" cy="40" r="19" fill="#E8B04B"/><circle cx="32" cy="46" r="11" fill="#FAF5EE"/></svg>`,
+  `<svg viewBox="0 0 64 64"><rect width="64" height="64" fill="#567A9B"/><path d="M0 40c10-8 22-8 32 0s22 8 32 0v24H0Z" fill="#FAF5EE"/><circle cx="20" cy="20" r="8" fill="#E8B04B"/></svg>`,
+  `<svg viewBox="0 0 64 64"><rect width="64" height="64" fill="#4E3A5C"/><circle cx="22" cy="26" r="13" fill="#D57A55"/><circle cx="44" cy="42" r="9" fill="#FAF5EE"/></svg>`,
+  `<svg viewBox="0 0 64 64"><rect width="64" height="64" fill="#5E8C63"/><circle cx="24" cy="22" r="10" fill="#FAF5EE"/><path d="M4 64c6-18 50-18 56 0Z" fill="#E8B04B"/></svg>`,
+  `<svg viewBox="0 0 64 64"><rect width="64" height="64" fill="#D9982B"/><circle cx="32" cy="32" r="17" fill="none" stroke="#FAF5EE" stroke-width="5"/><circle cx="32" cy="32" r="6" fill="#4E3A5C"/></svg>`,
+  `<svg viewBox="0 0 64 64"><rect width="64" height="64" fill="#A5907C"/><path d="M8 22c12 8 36 8 48 0M8 34c12 8 36 8 48 0M8 46c12 8 36 8 48 0" stroke="#FAF5EE" stroke-width="4.5" fill="none" stroke-linecap="round"/></svg>`,
+  `<svg viewBox="0 0 64 64"><rect width="64" height="64" fill="#3F6B45"/><circle cx="32" cy="28" r="12" fill="#FAF5EE"/><path d="M12 56c4-10 12-15 20-15s16 5 20 15Z" fill="#E8B04B"/></svg>`,
+];
+document.querySelectorAll('[data-av]').forEach(el=>{ el.innerHTML = AVS[+el.dataset.av % AVS.length]; });
+
+/* ── status bar ── */
+const SB = `<span class="t">9:41</span>
+<span style="display:flex;gap:6px;align-items:center">
+<svg width="17" height="11" viewBox="0 0 17 11" fill="#2E2433"><rect x="0" y="7" width="3" height="4" rx="0.8"/><rect x="4.5" y="5" width="3" height="6" rx="0.8"/><rect x="9" y="2.5" width="3" height="8.5" rx="0.8"/><rect x="13.5" y="0" width="3" height="11" rx="0.8"/></svg>
+<svg width="16" height="12" viewBox="0 0 16 12" fill="#2E2433"><path d="M8 9.6a1.6 1.6 0 1 1 0 2.4 1.6 1.6 0 0 1 0-2.4Zm-3-3a5.4 5.4 0 0 1 6 0l-1.3 1.6a3.2 3.2 0 0 0-3.4 0Zm-2.8-3a9.5 9.5 0 0 1 11.6 0l-1.3 1.6a7.4 7.4 0 0 0-9 0Z"/></svg>
+<svg width="25" height="12" viewBox="0 0 25 12" fill="none"><rect x="0.5" y="0.5" width="21" height="11" rx="3" stroke="#2E2433" stroke-opacity="0.4"/><rect x="2" y="2" width="18" height="8" rx="1.8" fill="#2E2433"/><path d="M23.5 4v4a2.2 2.2 0 0 0 0-4Z" fill="#2E2433" fill-opacity="0.4"/></svg>
+</span>`;
+document.querySelectorAll('[data-sb]').forEach(el=>el.innerHTML=SB);
+document.querySelectorAll('[data-ic="back"]').forEach(el=>el.innerHTML=
+  `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>`);
+
+/* ── navigation ── */
+function goTo(id){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  document.getElementById(id).querySelectorAll('.body').forEach(b=>b.scrollTop=0);
+}
+setTimeout(()=>{ if(document.getElementById('s-splash').classList.contains('active')) goTo('s-intro'); }, 2900);
+
+/* ── toast ── */
+let toastT;
+function toast(msg, tone='sage'){
+  const w = document.getElementById('toast');
+  w.innerHTML = `<span class="toast ${tone}">${msg}</span>`;
+  requestAnimationFrame(()=>requestAnimationFrame(()=>w.firstChild.classList.add('in')));
+  clearTimeout(toastT);
+  toastT = setTimeout(()=>{ if(w.firstChild) w.firstChild.classList.remove('in'); }, 3200);
+}
+
+/* ── verify ── */
+const otps = [...document.querySelectorAll('.otp')];
+otps.forEach((o,i)=>{
+  o.addEventListener('input',()=>{
+    if(o.value && i<3) otps[i+1].focus();
+    document.getElementById('verify-btn').disabled = !otps.every(x=>x.value);
+  });
+  o.addEventListener('keydown',e=>{ if(e.key==='Backspace' && !o.value && i>0) otps[i-1].focus(); });
+});
+
+/* ── identity ── */
+const avRow = document.getElementById('av-row');
+AVS.forEach((s,i)=>{
+  const d = document.createElement('div');
+  d.className = 'av-pick'+(i===0?' on':'');
+  d.innerHTML = s;
+  d.onclick = ()=>{ document.querySelectorAll('.av-pick').forEach(x=>x.classList.remove('on')); d.classList.add('on'); };
+  avRow.appendChild(d);
+});
+const NAMES = ['QuietRiver','SteadyOak','StillHealing','BraveHeart','SoftThunder','HopefulSoul'];
+const sugWrap = document.getElementById('name-sug');
+NAMES.forEach((n,i)=>{
+  const b = document.createElement('button');
+  b.className = 'sug'+(i===0?' on':'');
+  b.textContent = n;
+  b.onclick = ()=>{
+    document.querySelectorAll('.sug').forEach(x=>x.classList.remove('on'));
+    b.classList.add('on');
+    document.getElementById('name-inp').value = n;
+    document.getElementById('pn-name').textContent = n;
+  };
+  sugWrap.appendChild(b);
+});
+document.getElementById('name-inp').addEventListener('input',e=>{
+  document.getElementById('pn-name').textContent = e.target.value || 'you';
+  document.querySelectorAll('.sug').forEach(x=>x.classList.remove('on'));
+});
+
+/* ── guidelines ── */
+let consent = false;
+function toggleConsent(){
+  consent = !consent;
+  document.getElementById('cbox').classList.toggle('on',consent);
+  document.getElementById('ctick').style.display = consent?'block':'none';
+  document.getElementById('agree-btn').disabled = !consent;
+}
+
+/* ── topics ── */
+const TOPICS = ['Anxiety','Relationships','Career','School','Loneliness','Family','Financial stress','Faith','Healing',"Men's issues","Women's issues",'Other'];
+const tWrap = document.getElementById('topics');
+TOPICS.forEach(t=>{
+  const b = document.createElement('button');
+  b.className = 'topic'; b.textContent = t;
+  b.onclick = ()=>{
+    b.classList.toggle('on');
+    document.getElementById('topics-btn').disabled = !document.querySelector('.topic.on');
+  };
+  tWrap.appendChild(b);
+});
+
+/* ── communities + role sheet ── */
+let pendingJoinBtn = null, roleChosen = null;
+function openRole(btn, name){
+  if(btn.classList.contains('joined')) return;
+  pendingJoinBtn = btn; roleChosen = null;
+  document.getElementById('role-com').innerHTML = name;
+  document.querySelectorAll('#sheet-role .role-opt').forEach(x=>x.classList.remove('on'));
+  document.getElementById('role-btn').disabled = true;
+  openSheet('sheet-role');
+}
+function pickRole(el){
+  document.querySelectorAll('#sheet-role .role-opt').forEach(x=>x.classList.remove('on'));
+  el.classList.add('on'); roleChosen = el;
+  document.getElementById('role-btn').disabled = false;
+}
+function confirmRole(){
+  closeSheet('sheet-role');
+  if(pendingJoinBtn){
+    pendingJoinBtn.textContent = 'Joined';
+    pendingJoinBtn.classList.add('joined');
+    document.getElementById('com-btn').disabled = false;
+    toast('Joined · finding your Circle','sage');
+  }
+}
+
+/* ── check-in orbs ── */
+const MOODS = [
+  {n:'Heavy', c:'var(--mood-heavy)'}, {n:'Low', c:'var(--mood-low)'},
+  {n:'Okay', c:'var(--mood-okay)'}, {n:'Good', c:'var(--mood-good)'}, {n:'Light', c:'var(--mood-light)'}
+];
+let mood = null;
+const orbWrap = document.getElementById('orbs');
+MOODS.forEach((m,i)=>{
+  const w = document.createElement('div');
+  w.className = 'orb-w'; w.style.setProperty('--oc', m.c);
+  w.innerHTML = `<div class="orb"><i style="background:radial-gradient(circle at 38% 32%, rgba(255,252,248,.55), transparent 42%), ${m.c}"></i></div><span>${m.n}</span>`;
+  w.onclick = ()=>{
+    document.querySelectorAll('.orb-w').forEach(x=>x.classList.remove('on'));
+    w.classList.add('on'); mood = m.n;
+    document.getElementById('checkin-btn').disabled = false;
+  };
+  orbWrap.appendChild(w);
+});
+const MOOD_DEEP = {Heavy:'#4E3A5C', Low:'#3E5F7E', Okay:'#7C6A57', Good:'#8A5B0F', Light:'#3F6B45'};
+function finishCheckin(){
+  const m = MOODS.find(x=>x.n===mood) || MOODS[2];
+  const el = document.getElementById('home-mood');
+  el.textContent = m.n;
+  el.style.color = MOOD_DEEP[m.n];
+  document.querySelector('.mt-orb i').style.background =
+    `radial-gradient(circle at 38% 32%, rgba(255,252,248,.55), transparent 42%), ${m.c}`;
+  goTo('s-home');
+  setTimeout(()=>toast('Checked in · see you tomorrow','sage'), 450);
+}
+
+/* ── sheets ── */
+function openSheet(id){ document.getElementById(id).classList.add('open'); }
+function closeSheet(id){ document.getElementById(id).classList.remove('open'); }
+
+/* ── composer ── */
+function openComposer(){
+  document.getElementById('comp-1').style.display='block';
+  document.getElementById('comp-2').style.display='none';
+  openSheet('sheet-compose');
+}
+function pickPurpose(label){
+  document.getElementById('comp-purpose-h').textContent = label;
+  document.getElementById('comp-1').style.display='none';
+  document.getElementById('comp-2').style.display='block';
+}
+function backToPurpose(){
+  document.getElementById('comp-1').style.display='block';
+  document.getElementById('comp-2').style.display='none';
+}
+function pickAud(b){
+  document.querySelectorAll('.aud button').forEach(x=>x.classList.remove('on'));
+  b.classList.add('on');
+}
+function sharePost(){
+  closeSheet('sheet-compose');
+  document.getElementById('comp-txt').value='';
+  setTimeout(()=>toast('Shared with your Circle','sage'), 350);
+}
+
+/* ── encourage ── */
+function encourage(b){
+  if(b.classList.contains('on')) return;
+  b.classList.add('on');
+  const n = b.querySelector('span');
+  n.textContent = (+n.textContent)+1;
+}
+
+/* ── deep link + viewport fit ── */
+const p = new URLSearchParams(location.search).get('screen');
+if(p && document.getElementById(p)) goTo(p);
+(function(){
+  const fit = ()=>{
+    const s = Math.min(1, (innerHeight-24)/844, (innerWidth-24)/390);
+    document.getElementById('phone').style.transform = s<1 ? `scale(${s})` : '';
+  };
+  addEventListener('resize', fit); fit();
+})();
+</script>
+</body>
+</html>
