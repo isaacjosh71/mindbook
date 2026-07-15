@@ -16,6 +16,7 @@ This is the master repository: product docs, brand, design system, interactive p
 | [tokens/tokens.json](./tokens/tokens.json) | W3C DTCG design tokens |
 | `prototypes/onboarding/` | Onboarding → identity → first check-in → home (canon 01) |
 | `prototypes/circle/` | Circle space + post detail + Community + safety/crisis sheets (canon 02) |
+| `prototypes/profile/` | Profile + mood-history journal + journey + privacy + account sheets (canon 03) |
 | `app/` | Flutter application (upcoming) |
 | `backend/` | Java / Spring Boot API (upcoming) |
 
