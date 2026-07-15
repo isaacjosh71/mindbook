@@ -8,8 +8,8 @@
 
 1. **Warm-cool but soft.** Canvas `#F3F6F6` (light) / `#0F181C` (dark), surfaces `#FCFEFD` / `#17232A`, text ink `#213238` / `#E7EEF0`. Never pure white, never pure black. Every neutral is cool (blue-green) but soft — never hospital-white, never a dead grey.
 2. **Tide `#33718A` is interaction only** — CTAs, active tabs, links, focus rings. Status uses sage/peri/moon/rose tint pairs. Text on tide = `#F2FAFC` (light) / `#0D1A20` on the lighter dark-mode tide.
-3. **Weight discipline.** UI (Switzer) tops at 600; display serif (Gambetta) tops at **500**. Nothing renders at 700. `b, strong { font-weight: 600 }`.
-4. **Two voices, strict split.** Gambetta (serif, 500) = emotional register: greetings, screen titles, onboarding lines, mood words, empty-state headlines, the composer prompt. Switzer (sans) = every functional string: buttons, labels, meta, body. A button never wears the serif.
+3. **Weight discipline.** UI (Switzer) tops at 600; display serif (Baloo 2) tops at **500**. Nothing renders at 700. `b, strong { font-weight: 600 }`.
+4. **Two voices, strict split.** Baloo 2 (rounded, 500) = emotional register: greetings, screen titles, onboarding lines, mood words, empty-state headlines, the composer prompt. Switzer (sans) = every functional string: buttons, labels, meta, body. A button never wears the display face.
 5. **Cards: no borders, one shadow** — `0 2px 16px rgba(35,60,70,.08)` light, radius 20px. Selected state = `outline: 2px solid var(--tide)`, not a border.
 6. **Shape language: circles for meaning, softness for the rest.** Avatars, mood orbs, icon frames = circles. Buttons/inputs 14px, cards/sheets 20px, chips 999px. Media thumbs only may be 12px.
 7. **Icons: outline, 1.75 stroke, round caps, inline `stroke="currentColor"`.** Never filled (only the logo + mood orbs are filled). Every icon container shows a real glyph.
@@ -40,7 +40,7 @@
   --sh-card:0 2px 16px rgba(35,60,70,.08);
   --sh-sheet:0 -8px 40px rgba(15,24,28,.20);
   --sh-fab:0 6px 20px rgba(51,113,138,.32);
-  --f-d:'Gambetta',Georgia,serif; --f-u:'Switzer',system-ui,sans-serif;
+  --f-d:'Baloo 2','Trebuchet MS',sans-serif; --f-u:'Switzer',system-ui,sans-serif;
 }
 /* dark · night lake — set data-theme="dark" on the app root */
 [data-theme="dark"]{
@@ -63,19 +63,20 @@ b,strong{font-weight:600}
 
 Fonts:
 ```html
-<link href="https://api.fontshare.com/v2/css?f[]=gambetta@400,401,500,501&f[]=switzer@400,500,600&display=swap" rel="stylesheet">
+<link href="https://api.fontshare.com/v2/css?f[]=switzer@400,500,600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;500;600;700&display=swap" rel="stylesheet">
 ```
 
-**Note on Gambetta:** only weight **500** is used (400/italic don't reliably load from Fontshare and 500 reads perfectly calm). Set every display element to `font-family:var(--f-d); font-weight:500`. Italic taglines use `font-style:italic` on the 500 face (synthesized slant is acceptable).
+**Note on Baloo 2:** display renders at weight **500** (rounded and soft; heavier reads chunky). Set every display element to `font-family:var(--f-d); font-weight:500`. Baloo has **no italic** — never set `font-style:italic` on the display face; taglines are upright.
 
 ## 2. Type scale
 
 | Use | Face / size / weight | Notes |
 |---|---|---|
-| Hero greeting ("How are you, really?") | Gambetta 30/500, lh 1.24, ls −.005em | One per screen |
-| Screen display title | Gambetta 28/500 | Onboarding statements, big moments |
-| Section headline / empty-state title | Gambetta 22/500 | |
-| Sheet title | Gambetta 22/500 | |
+| Hero greeting ("How are you, really?") | Baloo 2 30/500, lh 1.24, ls −.005em | One per screen |
+| Screen display title | Baloo 2 28/500 | Onboarding statements, big moments |
+| Section headline / empty-state title | Baloo 2 22/500 | |
+| Sheet title | Baloo 2 22/500 | |
 | Card / row title | Switzer 16/600 | |
 | Body (posts, stories) | Switzer 15/400, lh 1.6 | |
 | UI body / buttons | Switzer 15/500–600, lh 1.4 | |
@@ -94,7 +95,7 @@ Fonts:
 - **Toast** top-center pill, tint family (sage/moon/…), auto-dismiss ~3.5s. Never dark, never bottom.
 - **Bottom nav** 5 slots — Home · Rooms · ⊕ Compose (center, 52px tide circle, `--sh-fab`) · My Circle · Profile. Inactive `--ink-3`, active tide glyph + 10.5/600 label. Detail screens: no nav, back chevron in a 40px circular surface button, centered Switzer 16/600 title.
 - **Avatars & identity** circular; anonymous avatars = abstract cool-palette generative patterns (no photos, no real initials). Guide avatars carry a sage ring + "Guide" sage pill. Composer always shows "Posting as {DisplayName}".
-- **Mood orbs** 54px circles, soft radial highlight over the mood color on `--track`; selected = 2px ring in the mood color + breath loop. Mood word beneath in Gambetta 500 of the deep mood tone.
+- **Mood orbs** 54px circles, soft radial highlight over the mood color on `--track`; selected = 2px ring in the mood color + breath loop. Mood word beneath in Baloo 2 500 of the deep mood tone.
 - **Theme toggle** 40px circular surface button, sun/moon glyph; flips `data-theme` on the app root and persists.
 
 ## 4. Motion — water physics

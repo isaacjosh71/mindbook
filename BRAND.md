@@ -76,27 +76,28 @@ Orbs stay circular, soft radial highlight, no faces, no emoji.
 
 | Layer | Face | Use |
 |---|---|---|
-| **Display** | **Gambetta** (Fontshare) | The app's voice: greetings ("How are you, really?"), screen titles, onboarding statements, mood words. A calm literary serif — warm, unhurried, human. Rendered at **weight 500 (Medium)** — never heavier, so it stays soft. Italic for taglines. |
+| **Display** | **Baloo 2** (Google Fonts) | The app's voice: greetings ("How are you, really?"), screen titles, onboarding statements, mood words. A soft rounded sans — warm, friendly, unhurried. Rendered at **weight 500**. No italic (Baloo has none) — taglines are upright. |
 | **UI** | **Switzer** (Fontshare) | Everything functional: body, labels, buttons, meta. Quiet, highly legible, disappears behind the content. Weights 400/500/600. |
 
 ```html
-<link href="https://api.fontshare.com/v2/css?f[]=gambetta@400,401,500,501&f[]=switzer@400,500,600&display=swap" rel="stylesheet">
+<link href="https://api.fontshare.com/v2/css?f[]=switzer@400,500,600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;500;600;700&display=swap" rel="stylesheet">
 ```
 
 **Rules**
-- Body 15px, reading line-height 1.6, UI 1.4. UI weight ceiling **600**; display serif tops out at **500** — nothing shouts in this app. `b, strong { font-weight: 600 }`.
-- Gambetta = emotional register only. Buttons, tabs, form labels are always Switzer.
-- Lowercase wordmark: **mindbook** — Gambetta 500, letter-spacing -0.01em.
+- Body 15px, reading line-height 1.6, UI 1.4. UI weight ceiling **600**; display renders at **500** — nothing shouts in this app. `b, strong { font-weight: 600 }`.
+- Baloo = emotional register only. Buttons, tabs, form labels are always Switzer.
+- Lowercase wordmark: **mindbook** — Baloo 2 500, letter-spacing -0.01em.
 
 ## 4. Logo — *the mind that reads as an open book*
 
-The mark is **a mind — two hemispheres — drawn so the central fissure also reads as the spine of an open book**, with a **lotus resting inside**. Three ideas in one shape: the *mind* (this is emotional inner life), the *open book* (Mind-book — a shared, honest page), and the *lotus* (calm, growth, still water — it ties the whole water concept together and echoes the mood orb's gold center).
+The mark is **a mind — two hemispheres — drawn so the central fissure also reads as the spine of an open book**. Two ideas in one shape: the *mind* (this is emotional inner life) and the *open book* (Mind-book — a shared, honest page). Clean and uncluttered; no motif inside.
 
-Outline in a **tide → storm** vertical gradient (calm at the crown, deeper at the base); lotus in periwinkle petals with a **moon-gold** center bud. Files: `assets/logo/mark.svg` (in-app, on mist/dark surfaces) and `assets/logo/app-icon.svg` (night-lake gradient ground, lighter strokes + soft glow so it reads on dark; export square, platform masks it).
+Outline in a **tide → storm** vertical gradient (calm at the crown, deeper at the base). Files: `assets/logo/mark.svg` (in-app, on mist/dark surfaces) and `assets/logo/app-icon.svg` (night-lake gradient ground, lighter strokes + soft glow so it reads on dark; export square, platform masks it).
 
-Construction rules: symmetric about x-centre; hemispheres are soft rounded lobes (never anatomical/veiny — this is calm, not clinical); the lotus is 5 petals (centre + 2 mid + 2 base) sitting in the lower-centre so the mind "holds" it. On the splash the mark scales in and settles into the **breath** loop while two **ripple** rings expand outward once.
+Construction rules: symmetric about x-centre; hemispheres are soft rounded lobes (never anatomical/veiny — this is calm, not clinical); the centre spine is essential (it carries the open-book read); nothing else inside. On the splash the mark scales in and settles into the **breath** loop while two **ripple** rings expand outward once.
 
-Wordmark: **mindbook** — lowercase, Gambetta 500, letter-spacing -0.01em. Lowercase because the brand sits beside you, it doesn't announce itself.
+Wordmark: **mindbook** — lowercase, Baloo 2 500, letter-spacing -0.01em. Lowercase because the brand sits beside you, it doesn't announce itself.
 
 ## 5. Shape, elevation
 

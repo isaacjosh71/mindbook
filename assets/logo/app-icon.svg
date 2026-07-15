@@ -1,24 +1,18 @@
 <svg viewBox="0 0 512 512" fill="none" xmlns="http://www.w3.org/2000/svg">
-  <!-- Mindbook app icon: the mind (open book) + lotus, on a night-lake ground.
+  <!-- Mindbook app icon: the mind (open book), on a night-lake ground.
        Export square; platforms apply their own mask. -->
   <rect width="512" height="512" fill="url(#lake)"/>
-  <circle cx="256" cy="238" r="150" fill="url(#glow)"/>
+  <circle cx="256" cy="256" r="150" fill="url(#glow)"/>
   <g transform="translate(32,54) scale(7)">
-    <g stroke="url(#brain)" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+    <g stroke="url(#brain)" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round">
       <path d="M32 13c-2.6-3-7-3.4-9.4-1C19.4 9 13.6 9.8 12 14c-3.8.6-5.4 5.4-2.8 8.4-2.8 2.4-2 7.4 1.6 8.8-2.2 3-.4 7.6 3.4 8.2-1 3.6 2 7 5.8 6.4 1.6 2.2 4.8 2.8 7 1.2"/>
       <path d="M32 13c2.6-3 7-3.4 9.4-1C44.6 9 50.4 9.8 52 14c3.8.6 5.4 5.4 2.8 8.4 2.8 2.4 2 7.4-1.6 8.8 2.2 3 .4 7.6-3.4 8.2 1 3.6-2 7-5.8 6.4-1.6 2.2-4.8 2.8-7 1.2"/>
-      <path d="M32 13v34" stroke-width="1.8" opacity="0.5"/>
+      <path d="M32 13v34" stroke-width="2"/>
     </g>
-    <path d="M32 39c-5.4 1-11-.6-13.6-4.4 3.2-2.6 8.4-2.4 11.4.4.9.9 1.6 2.2 2.2 4Z" fill="#7D91C9"/>
-    <path d="M32 39c5.4 1 11-.6 13.6-4.4-3.2-2.6-8.4-2.4-11.4.4-.9.9-1.6 2.2-2.2 4Z" fill="#7D91C9"/>
-    <path d="M32 39c-4.2-1.6-7-4.8-7-8.8 0-1.4.4-2.8 1-4.2 3.2 1.6 5.4 4.6 6 8.4Z" fill="#93A5D6"/>
-    <path d="M32 39c4.2-1.6 7-4.8 7-8.8 0-1.4-.4-2.8-1-4.2-3.2 1.6-5.4 4.6-6 8.4Z" fill="#93A5D6"/>
-    <path d="M32 39c-3-2.4-4.8-5.6-4.8-9 0-3 1.6-6.2 4.8-8.8 3.2 2.6 4.8 5.8 4.8 8.8 0 3.4-1.8 6.6-4.8 9Z" fill="#AEBCE6"/>
-    <circle cx="32" cy="26.5" r="1.9" fill="#E8C878"/>
   </g>
   <defs>
     <radialGradient id="glow" cx="0.5" cy="0.5" r="0.5">
-      <stop offset="0" stop-color="#7FB4C6" stop-opacity="0.28"/>
+      <stop offset="0" stop-color="#7FB4C6" stop-opacity="0.30"/>
       <stop offset="1" stop-color="#7FB4C6" stop-opacity="0"/>
     </radialGradient>
     <linearGradient id="lake" x1="256" y1="0" x2="256" y2="512" gradientUnits="userSpaceOnUse">
