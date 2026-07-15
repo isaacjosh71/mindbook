@@ -1,0 +1,5 @@
+# Mindbook prototypes — static site, no build step.
+# Publish the repo root (index.html hub + prototypes/ + assets/).
+[build]
+  publish = "."
+  command = ""
