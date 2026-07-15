@@ -1,138 +1,114 @@
-# Mindbook DESIGN.md — Implementation Rules
+# Mindbook DESIGN.md — Implementation Rules (v2)
 
 > Read order for any design task: **[BRAND.md](./BRAND.md)** (what it feels like) → **this file** (how to build it) → **[tokens/tokens.json](./tokens/tokens.json)** (exact values). Never invent tokens, colors, components, or patterns not documented in these three files. If something is missing, propose it, document it here, then use it.
+>
+> **Canon source of truth:** [`prototypes/onboarding/index.html`](./prototypes/onboarding/index.html) is the built reference every new screen copies from. When this doc and that file disagree, the file wins and this doc gets fixed.
 
 ## 0. Hard rules (non-negotiable)
 
-1. **Warm everything.** Canvas `#FAF5EE`, surfaces `#FFFCF8`, text ink `#2E2433`. Never pure white, never pure black, never a cool/blue-leaning grey.
-2. **Clay `#B9542F` is interaction only** — CTAs, active tabs, links, focus rings. Status uses sage/dusk/honey/rose tint pairs. Text on clay = `#FFF9F4`, never pure white, never dark.
-3. **Weight ceiling 600.** Nothing renders at 700. `b, strong { font-weight: 600 }` in every base stylesheet.
-4. **Two voices, strict split.** Sentient (serif) = emotional register: greetings, screen-title moments, onboarding lines, mood words, empty-state headlines. Author (sans) = every functional string: buttons, labels, meta, body copy. A button never wears the serif.
-5. **Cards: no borders, one shadow** — `0 2px 16px rgba(76,54,44,0.08)`, radius 20px. Selected state = `outline: 2px solid var(--clay)`, not border.
-6. **Circles for meaning, softness for everything else.** Avatars, mood orbs, icon frames = perfect circles. Buttons/inputs 14px, cards/sheets 20px, chips 999px. Media thumbs only may be 12px rounded squares.
+1. **Warm-cool but soft.** Canvas `#F3F6F6` (light) / `#0F181C` (dark), surfaces `#FCFEFD` / `#17232A`, text ink `#213238` / `#E7EEF0`. Never pure white, never pure black. Every neutral is cool (blue-green) but soft — never hospital-white, never a dead grey.
+2. **Tide `#33718A` is interaction only** — CTAs, active tabs, links, focus rings. Status uses sage/peri/moon/rose tint pairs. Text on tide = `#F2FAFC` (light) / `#0D1A20` on the lighter dark-mode tide.
+3. **Weight discipline.** UI (Switzer) tops at 600; display serif (Gambetta) tops at **500**. Nothing renders at 700. `b, strong { font-weight: 600 }`.
+4. **Two voices, strict split.** Gambetta (serif, 500) = emotional register: greetings, screen titles, onboarding lines, mood words, empty-state headlines, the composer prompt. Switzer (sans) = every functional string: buttons, labels, meta, body. A button never wears the serif.
+5. **Cards: no borders, one shadow** — `0 2px 16px rgba(35,60,70,.08)` light, radius 20px. Selected state = `outline: 2px solid var(--tide)`, not a border.
+6. **Shape language: circles for meaning, softness for the rest.** Avatars, mood orbs, icon frames = circles. Buttons/inputs 14px, cards/sheets 20px, chips 999px. Media thumbs only may be 12px.
 7. **Icons: outline, 1.75 stroke, round caps, inline `stroke="currentColor"`.** Never filled (only the logo + mood orbs are filled). Every icon container shows a real glyph.
 8. **4px spacing grid.** Mobile gutter 20px. No 7/11/15px values.
 9. **No emoji in UI. No em dashes in copy** — use ` · ` or a comma.
 10. **Mobile confirmations = bottom sheets. Back-office (web) confirmations = centered dialogs.** Never crossed.
-11. **Anonymity is visible**: any surface where a member's content becomes visible to others must state the posting identity ("Posting as HopefulSoul").
-12. **Safety is reachable**: report/block affordance on every post and comment; crisis resources ≤2 taps from anywhere.
-13. **One primary CTA per screen.**
-14. **Canvases**: mobile 390×844 (primary product), back-office web 1440. Prototypes are device-only on a dark warm backdrop `#171219`, no external chrome.
+11. **Both themes are first-class.** Every screen must be built and checked in light (morning lake) AND dark (night lake). Theme is toggled via `data-theme="dark"` on the app root; persist the choice.
+12. **Anonymity is visible.** Any surface where a member's content becomes visible to others states the posting identity ("Posting as QuietRiver").
+13. **Safety is reachable.** Report/block on every post and comment; crisis resources ≤2 taps from anywhere.
+14. **One primary CTA per screen. Canvases:** mobile 390×844 (primary), back-office web 1440. Prototypes are device-only on the deep-lake backdrop `#0A1418`, no external chrome (the theme toggle is an in-app control, not chrome).
 
 ## 1. CSS foundations (copy into every prototype)
 
 ```css
+/* light · morning lake */
 :root{
-  /* materials */
-  --paper:#FAF5EE; --surface:#FFFCF8; --hover:#F3ECE3; --track:#F0E8DD;
-  --ink-1:#2E2433; --ink-2:#6E6172; --ink-3:#9C92A1;
-  --border:#EBE1D6; --border-soft:#F2EAE0;
-  /* brand */
-  --clay:#B9542F; --clay-press:#9C4426; --clay-dim:rgba(185,84,47,.10); --on-clay:#FFF9F4;
-  /* status */
-  --sage:#5E8C63; --sage-dim:rgba(94,140,99,.14); --sage-deep:#3F6B45;
-  --dusk:#567A9B; --dusk-dim:rgba(86,122,155,.13); --dusk-deep:#3E5F7E;
-  --honey:#D9982B; --honey-dim:rgba(217,152,43,.16); --honey-deep:#8A5B0F;
-  --rose:#C24545; --rose-dim:rgba(194,69,69,.10); --rose-deep:#A03030;
-  /* mood ramp */
-  --mood-heavy:#4E3A5C; --mood-low:#567A9B; --mood-okay:#A5907C;
-  --mood-good:#D9982B; --mood-light:#5E8C63;
-  /* shape + elevation */
-  --r-control:14px; --r-card:20px; --r-media:12px;
-  --sh-card:0 2px 16px rgba(76,54,44,.08);
-  --sh-sheet:0 -8px 40px rgba(46,36,51,.18);
-  --sh-fab:0 6px 20px rgba(185,84,47,.32);
-  /* type */
-  --f-display:'Sentient',Georgia,serif;
-  --f-ui:'Author',system-ui,sans-serif;
+  --canvas:#F3F6F6; --surface:#FCFEFD; --hover:#EAF0F0; --track:#E7EEEE;
+  --ink-1:#213238; --ink-2:#5C6E74; --ink-3:#8FA1A6;
+  --border:#DDE6E5; --border-soft:#E6EDEC;
+  --tide:#33718A; --tide-press:#285D73; --tide-dim:rgba(51,113,138,.10); --on-tide:#F2FAFC;
+  --sage:#4E8D7C; --sage-dim:rgba(78,141,124,.14); --sage-deep:#33685A;
+  --peri:#6B7FB3; --peri-dim:rgba(107,127,179,.13); --peri-deep:#4A5C8F;
+  --moon:#C9A24B; --moon-dim:rgba(201,162,75,.16); --moon-deep:#8A6A1F;
+  --rose:#C05B5B; --rose-dim:rgba(192,91,91,.10); --rose-deep:#9E4343;
+  --storm:#4A4E75; --storm-dim:rgba(74,78,117,.12);
+  --mood-heavy:#4A4E75; --mood-low:#5C7A99; --mood-okay:#7F958F; --mood-good:#4E9B8F; --mood-light:#C9A24B;
+  --r-control:14px; --r-card:20px;
+  --sh-card:0 2px 16px rgba(35,60,70,.08);
+  --sh-sheet:0 -8px 40px rgba(15,24,28,.20);
+  --sh-fab:0 6px 20px rgba(51,113,138,.32);
+  --f-d:'Gambetta',Georgia,serif; --f-u:'Switzer',system-ui,sans-serif;
+}
+/* dark · night lake — set data-theme="dark" on the app root */
+[data-theme="dark"]{
+  --canvas:#0F181C; --surface:#17232A; --hover:#1E2D34; --track:#22333B;
+  --ink-1:#E7EEF0; --ink-2:#9FB2B8; --ink-3:#6E8188;
+  --border:#26363E; --border-soft:#1D2C33;
+  --tide:#5CA2BC; --tide-press:#4A8DA6; --tide-dim:rgba(92,162,188,.16); --on-tide:#0D1A20;
+  --sage:#6FAE9C; --sage-dim:rgba(111,174,156,.18); --sage-deep:#9FD3C4;
+  --peri:#8B9CC9; --peri-dim:rgba(139,156,201,.18); --peri-deep:#B3C0E0;
+  --moon:#D9B66A; --moon-dim:rgba(217,182,106,.18); --moon-deep:#E8CE92;
+  --rose:#D07A7A; --rose-dim:rgba(208,122,122,.16); --rose-deep:#E5A3A3;
+  --storm:#8489B8; --storm-dim:rgba(132,137,184,.18);
+  --mood-heavy:#7B7FB0; --mood-low:#7C9AB9; --mood-okay:#9FB5AF; --mood-good:#6FBBAF; --mood-light:#D9B66A;
+  --sh-card:0 2px 16px rgba(0,0,0,.30);
 }
 *{margin:0;padding:0;box-sizing:border-box;-webkit-font-smoothing:antialiased}
-body{font-family:var(--f-ui);color:var(--ink-1);font-size:15px;line-height:1.4}
+body{font-family:var(--f-u);color:var(--ink-1);font-size:15px;line-height:1.4}
 b,strong{font-weight:600}
-button{font-family:var(--f-ui);border:none;background:none;cursor:pointer;color:inherit}
 ```
 
 Fonts:
 ```html
-<link href="https://api.fontshare.com/v2/css?f[]=sentient@400,401,500,501,600&f[]=author@400,500,600&display=swap" rel="stylesheet">
+<link href="https://api.fontshare.com/v2/css?f[]=gambetta@400,401,500,501&f[]=switzer@400,500,600&display=swap" rel="stylesheet">
 ```
+
+**Note on Gambetta:** only weight **500** is used (400/italic don't reliably load from Fontshare and 500 reads perfectly calm). Set every display element to `font-family:var(--f-d); font-weight:500`. Italic taglines use `font-style:italic` on the 500 face (synthesized slant is acceptable).
 
 ## 2. Type scale
 
 | Use | Face / size / weight | Notes |
 |---|---|---|
-| Hero greeting ("How are you, really?") | Sentient 32/600, lh 1.2, ls −0.01em | One per screen max |
-| Screen display title | Sentient 26/600 | Onboarding statements, big moments |
-| Section headline / empty-state title | Sentient 22/500 | |
-| Card / row title | Author 16/600 | |
-| Body (posts, stories) | Author 15/400, lh 1.6 | |
-| UI body / buttons | Author 15/500–600, lh 1.4 | |
-| Meta / secondary | Author 13/400–500, `--ink-2` | |
-| Caption / timestamp | Author 12/400, `--ink-3` | |
-| Eyebrow label | Author 11/600, uppercase, ls 0.08em, `--ink-3` | Sparingly |
+| Hero greeting ("How are you, really?") | Gambetta 30/500, lh 1.24, ls −.005em | One per screen |
+| Screen display title | Gambetta 28/500 | Onboarding statements, big moments |
+| Section headline / empty-state title | Gambetta 22/500 | |
+| Sheet title | Gambetta 22/500 | |
+| Card / row title | Switzer 16/600 | |
+| Body (posts, stories) | Switzer 15/400, lh 1.6 | |
+| UI body / buttons | Switzer 15/500–600, lh 1.4 | |
+| Meta / secondary | Switzer 13/400–500, `--ink-2` | |
+| Caption / timestamp | Switzer 12/400, `--ink-3` | |
+| Eyebrow label | Switzer 11/600, uppercase, ls .08em, `--ink-3` | Sparingly |
 
-## 3. Core components (mobile v1)
+## 3. Core components (mobile v1) — see the prototype for full CSS
 
-### Buttons
-```css
-.btn{height:54px;width:100%;border-radius:var(--r-control);background:var(--clay);
-  color:var(--on-clay);font-size:15.5px;font-weight:600;display:flex;
-  align-items:center;justify-content:center;gap:8px;transition:background .22s}
-.btn:active{background:var(--clay-press)}
-.btn-quiet{background:var(--clay-dim);color:var(--clay)}          /* secondary */
-.btn-ghost{background:transparent;color:var(--ink-2);height:44px} /* tertiary  */
-.btn-danger{background:var(--rose-dim);color:var(--rose-deep)}    /* destructive: tinted, never solid red */
-```
-Solid rose fill only inside a confirmation sheet's final action.
+- **Buttons** `.btn` 54px, radius 14, `var(--tide)` bg + `var(--on-tide)` text; `.btn-quiet` (tide-dim), `.btn-ghost` (transparent ink-2), `.btn-danger` (rose-dim fill; solid rose only in a confirm sheet's final action).
+- **Inputs** `.inp` 50px, radius 14, `1.5px var(--border)`, surface bg; focus = tide border + `0 0 0 3px var(--tide-dim)`.
+- **Cards** `.card` surface + `var(--sh-card)` + radius 20, no border. Tone on a small 36–40px circular tonal icon or a pill — never a full-card tint, never a colored left border.
+- **Chips / filter pills** warm-cool track (`--track`) with a surface-white active pill in tide text. Multi-select topic chips: `1.5px var(--border)` → selected `tide-dim` bg + tide border + tide text.
+- **Badges / status pills** fully round, 22px, 12px/500, tint bg + deep-tint text, no uppercase. Post-purpose map: **Need Support** rose · **Need Advice** peri · **Encouragement** sage · **My Story** storm · **Prayer Request** moon.
+- **Bottom sheets** overlay `rgba(10,20,24,.55)`; sheet surface, top radius 24, drag pill, `var(--sh-sheet)`, slide-up 300ms. All overlays are sheets (pickers, confirms, audience, report, success).
+- **Toast** top-center pill, tint family (sage/moon/…), auto-dismiss ~3.5s. Never dark, never bottom.
+- **Bottom nav** 5 slots — Home · Rooms · ⊕ Compose (center, 52px tide circle, `--sh-fab`) · My Circle · Profile. Inactive `--ink-3`, active tide glyph + 10.5/600 label. Detail screens: no nav, back chevron in a 40px circular surface button, centered Switzer 16/600 title.
+- **Avatars & identity** circular; anonymous avatars = abstract cool-palette generative patterns (no photos, no real initials). Guide avatars carry a sage ring + "Guide" sage pill. Composer always shows "Posting as {DisplayName}".
+- **Mood orbs** 54px circles, soft radial highlight over the mood color on `--track`; selected = 2px ring in the mood color + breath loop. Mood word beneath in Gambetta 500 of the deep mood tone.
+- **Theme toggle** 40px circular surface button, sun/moon glyph; flips `data-theme` on the app root and persists.
 
-### Inputs
-50px height, 14px radius, `1.5px solid var(--border)`, surface bg; focus = clay border + `box-shadow:0 0 0 3px var(--clay-dim)`. Labels 13/500 `--ink-2` above the field.
+## 4. Motion — water physics
 
-### Cards
-`.card { background:var(--surface); border-radius:var(--r-card); box-shadow:var(--sh-card); padding:16px 18px; }` — no border ever. Status tone lives on a small 36px circular tonal icon or a pill, never a full-card tint, never a colored left border.
-
-### Chips / filter pills
-Warm track behind, surface-white active pill with clay text:
-```css
-.chips{display:flex;gap:6px;background:var(--track);border-radius:999px;padding:4px}
-.chip{height:34px;padding:0 16px;border-radius:999px;font-size:13.5px;font-weight:500;color:var(--ink-2)}
-.chip.on{background:var(--surface);color:var(--clay);font-weight:600;box-shadow:var(--sh-card)}
-```
-Multi-select topic chips (onboarding) are standalone pills: `border:1.5px solid var(--border)` → selected: `background:var(--clay-dim); border-color:var(--clay); color:var(--clay)`.
-
-### Badges & status pills
-22px tall, 12px/500, 999px radius (fully round — this app has no square badges), tint bg + deep-tint text, no uppercase.
-Post-purpose mapping: **Need Support** rose-dim · **Need Advice** dusk-dim · **Encouragement** sage-dim · **My Story** honey-dim · **Prayer Request** plum tint `rgba(78,58,92,.12)/#4E3A5C`.
-
-### Bottom sheets (all mobile overlays)
-Overlay `rgba(33,27,38,.5)`; sheet: surface bg, top radius 24px, drag pill 36×4 `--track`, padding 8px 20px 32px, `--sh-sheet`, slide-up 300ms. Pickers, confirmations, audience selection, report flows, success moments — all sheets.
-
-### Toast
-Top-center pill, tint family by type (sage/dusk/honey/rose), 13px/500 deep-tint text, auto-dismiss ~3.5s. Never dark, never bottom-anchored.
-
-### Bottom nav (root screens only)
-5 slots: **Home · Communities · ⊕ Compose (center, 52px clay circle, `--sh-fab`) · My Circle · Profile**. Inactive `--ink-3`, active clay glyph + 10.5px/600 label. Detail screens: no bottom nav, back chevron in a 40px circular surface button, centered screen title (Author 16/600).
-
-### Avatars & identity
-Circular always. Anonymous avatars = abstract warm-palette generative patterns (no photos, no real initials). Guide avatars carry a 2px sage ring + tiny "Guide" sage pill. The composer always shows "Posting as **{DisplayName}**" with a swap affordance where allowed.
-
-### Mood orbs (check-in)
-56px circles in a 5-across row, each a soft radial fill of its mood color on `--track` base; selected = 2px ring in mood color + breathing animation (`scale 1→1.035→1`, 3.2s loop). Mood word beneath in Sentient 15/500 of the deep mood tone.
-
-## 4. Screen anatomy (mobile)
-
-- **Phone shell**: 390×844, radius 32px, on `#171219` backdrop, `box-shadow: 0 50px 130px rgba(0,0,0,.65), inset 0 0 0 1px rgba(255,255,255,.05)`. Device-only, zero external chrome.
-- **Status bar**: standard 3-icon set (time + signal + wifi + battery), ink on paper screens, cream on plum/dark heros.
-- **Home**: warm greeting block (Sentient, time-aware: "Good evening, QuietRiver"), check-in nudge card (or today's mood if done), composer prompt card "What's going on with you today?", Circle activity, then Community recommendations. The page scrolls as one.
-- **Rhythm**: section eyebrow → 8px → content; same-kind cards stack at 12–16px; unlike sections 28px+.
-- Root screens keep bottom nav; drilled-in screens never do.
+- Default 220ms `cubic-bezier(.3,0,.2,1)`; sheets 300ms `cubic-bezier(.2,.9,.25,1)`.
+- **Breath** — orbs + success moments scale 1→1.04→1 on a 3.2–3.6s loop.
+- **Ripple** — an outlined ring expands from center once and fades (`scale .5→1.9, opacity .45→0`). Used on the splash mark and the Circle-reveal. Never bounces.
+- Screen entrance: fade + 14px rise. No confetti, no springy overshoot.
 
 ## 5. Accessibility & sensitivity floor
 
-- Text contrast ≥ 4.5:1 (body) / 3:1 (18px+). All tint-pair combos in tokens.json pass on their dim backgrounds.
-- Tap targets ≥ 44px. Focus states visible (clay ring).
-- Mood data is private by default; no UI ever shows another member's mood.
-- Destructive/report flows: calm language, confirm via sheet, never guilt-trip copy.
+- Body contrast ≥ 4.5:1, 18px+ ≥ 3:1 — verified in both themes. Tap targets ≥ 44px. Focus rings visible (tide).
+- Mood data is private; no UI ever shows another member's mood.
+- Report/destructive flows use calm language, confirm via sheet, never guilt-trip copy.
 
 ## 6. Where things live
 
@@ -142,9 +118,9 @@ Circular always. Anonymous avatars = abstract warm-palette generative patterns (
 | Brand & creative direction | `BRAND.md` |
 | Tokens | `tokens/tokens.json` |
 | Implementation rules (this) | `DESIGN.md` |
+| Logo assets | `assets/logo/` |
 | Interactive HTML prototypes | `prototypes/<flow-slug>/index.html` |
-| Starter template (once canon exists) | `templates/` |
 | Flutter app | `app/` (later) |
-| Backend (Spring Boot) | `backend/` (later, or its own repo) |
+| Backend (Spring Boot) | `backend/` (later) |
 
-Prototype-first workflow: every flow ships as a clickable device-only HTML prototype before any Flutter code. The first built flow (onboarding → check-in → home) becomes the **canon source** future flows copy from; components extracted from it get documented here as they stabilize.
+Prototype-first: every flow ships as a clickable device-only HTML prototype (light + dark) before any Flutter code. `prototypes/onboarding/` is the canon other screens copy from.

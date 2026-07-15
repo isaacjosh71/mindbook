@@ -76,33 +76,27 @@ Orbs stay circular, soft radial highlight, no faces, no emoji.
 
 | Layer | Face | Use |
 |---|---|---|
-| **Display** | **Ranade** (Fontshare) | The app's voice: greetings ("How are you, really?"), screen titles, onboarding statements, mood words. Soft, rounded, unhurried — calm without being sleepy. Weights 400/500/600 + italics. |
+| **Display** | **Gambetta** (Fontshare) | The app's voice: greetings ("How are you, really?"), screen titles, onboarding statements, mood words. A calm literary serif — warm, unhurried, human. Rendered at **weight 500 (Medium)** — never heavier, so it stays soft. Italic for taglines. |
 | **UI** | **Switzer** (Fontshare) | Everything functional: body, labels, buttons, meta. Quiet, highly legible, disappears behind the content. Weights 400/500/600. |
 
 ```html
-<link href="https://api.fontshare.com/v2/css?f[]=ranade@400,401,500,501,600&f[]=switzer@400,500,600&display=swap" rel="stylesheet">
+<link href="https://api.fontshare.com/v2/css?f[]=gambetta@400,401,500,501&f[]=switzer@400,500,600&display=swap" rel="stylesheet">
 ```
 
 **Rules**
-- Body 15px, reading line-height 1.6, UI 1.4. Weight ceiling **600** — nothing shouts in this app. `b, strong { font-weight: 600 }`.
-- Ranade = emotional register only. Buttons, tabs, form labels are always Switzer.
-- Lowercase wordmark: **mindbook** — Ranade 600, letter-spacing -0.01em.
+- Body 15px, reading line-height 1.6, UI 1.4. UI weight ceiling **600**; display serif tops out at **500** — nothing shouts in this app. `b, strong { font-weight: 600 }`.
+- Gambetta = emotional register only. Buttons, tabs, form labels are always Switzer.
+- Lowercase wordmark: **mindbook** — Gambetta 500, letter-spacing -0.01em.
 
-## 4. Logo — *the drop and the ripple*
+## 4. Logo — *the mind that reads as an open book*
 
-No book. The mark is **a golden drop above two cupped ripple arcs**: a feeling, received and held. It echoes the mood orb (same gold circle that breathes at check-in), the Circle (a ring of people receiving one share), and reads as a soft open "m" in silhouette.
+The mark is **a mind — two hemispheres — drawn so the central fissure also reads as the spine of an open book**, with a **lotus resting inside**. Three ideas in one shape: the *mind* (this is emotional inner life), the *open book* (Mind-book — a shared, honest page), and the *lotus* (calm, growth, still water — it ties the whole water concept together and echoes the mood orb's gold center).
 
-In-app mark (on mist/dark surfaces): moon-gold drop, tide arcs (outer arc lighter — ripples decay):
+Outline in a **tide → storm** vertical gradient (calm at the crown, deeper at the base); lotus in periwinkle petals with a **moon-gold** center bud. Files: `assets/logo/mark.svg` (in-app, on mist/dark surfaces) and `assets/logo/app-icon.svg` (night-lake gradient ground, lighter strokes + soft glow so it reads on dark; export square, platform masks it).
 
-```html
-<svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
-  <circle cx="32" cy="15" r="6" fill="#C9A24B"/>
-  <path d="M18 30a14 14 0 0 0 28 0" stroke="#33718A" stroke-width="5.5" stroke-linecap="round"/>
-  <path d="M9 34a23 23 0 0 0 46 0" stroke="#82AFC2" stroke-width="4.5" stroke-linecap="round"/>
-</svg>
-```
+Construction rules: symmetric about x-centre; hemispheres are soft rounded lobes (never anatomical/veiny — this is calm, not clinical); the lotus is 5 petals (centre + 2 mid + 2 base) sitting in the lower-centre so the mind "holds" it. On the splash the mark scales in and settles into the **breath** loop while two **ripple** rings expand outward once.
 
-App icon: night-lake gradient ground, glowing gold drop, pale mist ripples (see `assets/logo/app-icon.svg`). The same composition animates on the splash: **drop falls → ripples widen in sequence → orb settles into the breathing loop.**
+Wordmark: **mindbook** — lowercase, Gambetta 500, letter-spacing -0.01em. Lowercase because the brand sits beside you, it doesn't announce itself.
 
 ## 5. Shape, elevation
 

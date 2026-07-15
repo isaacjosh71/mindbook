@@ -1,8 +1,10 @@
 <!DOCTYPE html>
 <!--
   MINDBOOK · Canon prototype 01 — Onboarding → Identity → Check-in → Home
-  Canvas: 390×844 device-only on dark warm backdrop. No external chrome.
-  Source of truth: BRAND.md + DESIGN.md + tokens/tokens.json. Weight ceiling 600.
+  Canvas: 390×844 device-only on a deep-lake backdrop. No external chrome.
+  Source of truth: BRAND.md v2 + DESIGN.md + tokens/tokens.json.
+  Theme: light (morning lake) + dark (night lake) via the in-app toggle.
+  Weight ceiling 600. Motion: breath + ripple (water physics).
 -->
 <html lang="en">
 <head>
@@ -10,70 +12,88 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>Mindbook · Onboarding</title>
 <link rel="preconnect" href="https://api.fontshare.com"/>
-<link href="https://api.fontshare.com/v2/css?f[]=sentient@400,401,500,501,600&f[]=author@400,500,600&display=swap" rel="stylesheet"/>
+<link href="https://api.fontshare.com/v2/css?f[]=gambetta@400,401,500,501&f[]=switzer@400,500,600&display=swap" rel="stylesheet"/>
 <style>
-/* ═══ tokens ═══ */
+/* ═══ tokens · light (morning lake) ═══ */
 :root{
-  --paper:#FAF5EE; --surface:#FFFCF8; --hover:#F3ECE3; --track:#F0E8DD;
-  --ink-1:#2E2433; --ink-2:#6E6172; --ink-3:#9C92A1;
-  --border:#EBE1D6; --border-soft:#F2EAE0;
-  --clay:#B9542F; --clay-press:#9C4426; --clay-dim:rgba(185,84,47,.10); --on-clay:#FFF9F4;
-  --sage:#5E8C63; --sage-dim:rgba(94,140,99,.14); --sage-deep:#3F6B45;
-  --dusk:#567A9B; --dusk-dim:rgba(86,122,155,.13); --dusk-deep:#3E5F7E;
-  --honey:#D9982B; --honey-dim:rgba(217,152,43,.16); --honey-deep:#8A5B0F;
-  --rose:#C24545; --rose-dim:rgba(194,69,69,.10); --rose-deep:#A03030;
-  --plum:#4E3A5C; --plum-dim:rgba(78,58,92,.12);
-  --mood-heavy:#4E3A5C; --mood-low:#567A9B; --mood-okay:#A5907C; --mood-good:#D9982B; --mood-light:#5E8C63;
+  --canvas:#F3F6F6; --surface:#FCFEFD; --hover:#EAF0F0; --track:#E7EEEE;
+  --ink-1:#213238; --ink-2:#5C6E74; --ink-3:#8FA1A6;
+  --border:#DDE6E5; --border-soft:#E6EDEC;
+  --tide:#33718A; --tide-press:#285D73; --tide-dim:rgba(51,113,138,.10); --on-tide:#F2FAFC;
+  --sage:#4E8D7C; --sage-dim:rgba(78,141,124,.14); --sage-deep:#33685A;
+  --peri:#6B7FB3; --peri-dim:rgba(107,127,179,.13); --peri-deep:#4A5C8F;
+  --moon:#C9A24B; --moon-dim:rgba(201,162,75,.16); --moon-deep:#8A6A1F;
+  --rose:#C05B5B; --rose-dim:rgba(192,91,91,.10); --rose-deep:#9E4343;
+  --storm:#4A4E75; --storm-dim:rgba(74,78,117,.12);
+  --mood-heavy:#4A4E75; --mood-low:#5C7A99; --mood-okay:#7F958F; --mood-good:#4E9B8F; --mood-light:#C9A24B;
   --r-control:14px; --r-card:20px;
-  --sh-card:0 2px 16px rgba(76,54,44,.08);
-  --sh-sheet:0 -8px 40px rgba(46,36,51,.18);
-  --sh-fab:0 6px 20px rgba(185,84,47,.32);
-  --f-d:'Sentient',Georgia,serif; --f-u:'Author',system-ui,sans-serif;
+  --sh-card:0 2px 16px rgba(35,60,70,.08);
+  --sh-sheet:0 -8px 40px rgba(15,24,28,.20);
+  --sh-fab:0 6px 20px rgba(51,113,138,.32);
+  --f-d:'Gambetta',Georgia,serif; --f-u:'Switzer',system-ui,sans-serif;
+}
+/* ═══ tokens · dark (night lake) ═══ */
+#phone[data-theme="dark"]{
+  --canvas:#0F181C; --surface:#17232A; --hover:#1E2D34; --track:#22333B;
+  --ink-1:#E7EEF0; --ink-2:#9FB2B8; --ink-3:#6E8188;
+  --border:#26363E; --border-soft:#1D2C33;
+  --tide:#5CA2BC; --tide-press:#4A8DA6; --tide-dim:rgba(92,162,188,.16); --on-tide:#0D1A20;
+  --sage:#6FAE9C; --sage-dim:rgba(111,174,156,.18); --sage-deep:#9FD3C4;
+  --peri:#8B9CC9; --peri-dim:rgba(139,156,201,.18); --peri-deep:#B3C0E0;
+  --moon:#D9B66A; --moon-dim:rgba(217,182,106,.18); --moon-deep:#E8CE92;
+  --rose:#D07A7A; --rose-dim:rgba(208,122,122,.16); --rose-deep:#E5A3A3;
+  --storm:#8489B8; --storm-dim:rgba(132,137,184,.18);
+  --mood-heavy:#7B7FB0; --mood-low:#7C9AB9; --mood-okay:#9FB5AF; --mood-good:#6FBBAF; --mood-light:#D9B66A;
+  --sh-card:0 2px 16px rgba(0,0,0,.30);
+  --sh-sheet:0 -8px 40px rgba(0,0,0,.5);
+  --sh-fab:0 6px 20px rgba(92,162,188,.30);
 }
 *{margin:0;padding:0;box-sizing:border-box;-webkit-font-smoothing:antialiased}
-html,body{width:100%;height:100%;background:#171219;display:flex;align-items:center;justify-content:center;overflow:hidden;font-family:var(--f-u)}
+html,body{width:100%;height:100%;background:#0A1418;display:flex;align-items:center;justify-content:center;overflow:hidden;font-family:var(--f-u)}
 b,strong{font-weight:600}
 button{font-family:var(--f-u);border:none;background:none;cursor:pointer;color:inherit}
 input,textarea{font-family:var(--f-u);color:var(--ink-1)}
 
-.phone{width:390px;height:844px;background:var(--paper);border-radius:32px;overflow:hidden;position:relative;flex-shrink:0;
-  box-shadow:0 50px 130px rgba(0,0,0,.65), inset 0 0 0 1px rgba(255,255,255,.05);
-  color:var(--ink-1);font-size:15px;line-height:1.4}
+.phone{width:390px;height:844px;background:var(--canvas);border-radius:32px;overflow:hidden;position:relative;flex-shrink:0;
+  box-shadow:0 50px 130px rgba(0,0,0,.7), inset 0 0 0 1px rgba(255,255,255,.05);
+  color:var(--ink-1);font-size:15px;line-height:1.4;transition:background .3s}
 
 /* ═══ screens ═══ */
-.screen{position:absolute;inset:0;display:none;flex-direction:column;background:var(--paper)}
+.screen{position:absolute;inset:0;display:none;flex-direction:column;background:var(--canvas);transition:background .3s}
 .screen.active{display:flex;animation:scrIn .34s cubic-bezier(.3,0,.2,1)}
 @keyframes scrIn{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
 
 /* status bar */
-.sbar{height:50px;flex-shrink:0;display:flex;align-items:flex-end;justify-content:space-between;padding:0 28px 6px}
+.sbar{height:50px;flex-shrink:0;display:flex;align-items:flex-end;justify-content:space-between;padding:0 28px 6px;color:var(--ink-1)}
 .sbar .t{font-size:14px;font-weight:600;letter-spacing:.01em}
 .sbar svg{display:block}
-.home-ind{position:absolute;bottom:8px;left:50%;transform:translateX(-50%);width:134px;height:5px;border-radius:3px;background:rgba(46,36,51,.22);z-index:40;pointer-events:none}
+.home-ind{position:absolute;bottom:8px;left:50%;transform:translateX(-50%);width:134px;height:5px;border-radius:3px;background:var(--ink-3);opacity:.35;z-index:40;pointer-events:none}
 
-/* scroll body */
 .body{flex:1;overflow-y:auto;padding:0 20px;display:flex;flex-direction:column}
 .body::-webkit-scrollbar{display:none}
+
+/* theme toggle */
+.theme-tgl{width:40px;height:40px;border-radius:50%;background:var(--surface);box-shadow:var(--sh-card);display:flex;align-items:center;justify-content:center;color:var(--ink-2)}
 
 /* onboarding chrome */
 .ob-top{display:flex;align-items:center;justify-content:space-between;padding:6px 20px 0;flex-shrink:0}
 .ob-back{width:40px;height:40px;border-radius:50%;background:var(--surface);box-shadow:var(--sh-card);display:flex;align-items:center;justify-content:center;color:var(--ink-2)}
 .ob-dots{display:flex;gap:5px}
 .ob-dots i{width:6px;height:6px;border-radius:50%;background:var(--track)}
-.ob-dots i.on{background:var(--clay);width:16px;border-radius:3px;transition:.22s}
+.ob-dots i.on{background:var(--tide);width:16px;border-radius:3px;transition:.22s}
 .ob-skip{font-size:13.5px;font-weight:500;color:var(--ink-3);width:40px;text-align:right}
 .ob-foot{padding:14px 20px 34px;flex-shrink:0;display:flex;flex-direction:column;gap:6px}
 
-.h-display{font-family:var(--f-d);font-weight:600;font-size:27px;line-height:1.22;letter-spacing:-.01em;color:var(--ink-1)}
+.h-display{font-family:var(--f-d);font-weight:500;font-size:28px;line-height:1.24;letter-spacing:-.005em;color:var(--ink-1)}
 .h-sub{font-size:14.5px;line-height:1.55;color:var(--ink-2);margin-top:10px}
 .eyebrow{font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-3)}
 
 /* buttons */
-.btn{height:54px;width:100%;border-radius:var(--r-control);background:var(--clay);color:var(--on-clay);
+.btn{height:54px;width:100%;border-radius:var(--r-control);background:var(--tide);color:var(--on-tide);
   font-size:15.5px;font-weight:600;display:flex;align-items:center;justify-content:center;gap:8px;transition:background .22s,opacity .22s}
-.btn:active{background:var(--clay-press)}
+.btn:active{background:var(--tide-press)}
 .btn[disabled]{opacity:.4;pointer-events:none}
-.btn-quiet{background:var(--clay-dim);color:var(--clay)}
+.btn-quiet{background:var(--tide-dim);color:var(--tide)}
 .btn-ghost{background:transparent;color:var(--ink-2);height:46px;font-weight:500;font-size:14.5px}
 
 /* inputs */
@@ -81,63 +101,58 @@ input,textarea{font-family:var(--f-u);color:var(--ink-1)}
 .field label{font-size:13px;font-weight:500;color:var(--ink-2)}
 .inp{height:50px;border-radius:var(--r-control);border:1.5px solid var(--border);background:var(--surface);
   padding:0 16px;font-size:15px;outline:none;transition:border-color .18s,box-shadow .18s;width:100%}
-.inp:focus{border-color:var(--clay);box-shadow:0 0 0 3px var(--clay-dim)}
+.inp:focus{border-color:var(--tide);box-shadow:0 0 0 3px var(--tide-dim)}
 .inp::placeholder{color:var(--ink-3)}
 
 /* cards */
 .card{background:var(--surface);border-radius:var(--r-card);box-shadow:var(--sh-card);padding:16px 18px}
 
 /* ═══ splash ═══ */
-#s-splash{background:var(--paper);align-items:center;justify-content:center}
-.sp-wrap{display:flex;flex-direction:column;align-items:center;gap:0}
-.sp-mark{width:120px;height:120px;position:relative}
-.sp-orb{position:absolute;left:50%;top:8px;width:19px;height:19px;margin-left:-9.5px;border-radius:50%;background:var(--honey);
-  animation:orbIn .9s .55s cubic-bezier(.2,.9,.25,1) both, breath 3.2s 1.9s ease-in-out infinite}
-.sp-glow{position:absolute;left:50%;top:-14px;width:64px;height:64px;margin-left:-32px;border-radius:50%;
-  background:radial-gradient(circle, rgba(217,152,43,.32), rgba(217,152,43,0) 68%);
-  animation:fadeIn .9s .8s both, breath 3.2s 1.9s ease-in-out infinite}
-@keyframes orbIn{from{opacity:0;transform:translateY(26px) scale(.4)}to{opacity:1;transform:none}}
-@keyframes breath{0%,100%{transform:scale(1)}50%{transform:scale(1.05)}}
-@keyframes fadeIn{from{opacity:0}to{opacity:1}}
-.sp-page{position:absolute;width:52px;height:66px;top:38px}
-.sp-page.l{left:8px;transform-origin:right center;animation:pageL .75s .12s cubic-bezier(.2,.9,.25,1) both}
-.sp-page.r{right:8px;transform-origin:left center;animation:pageR .75s .12s cubic-bezier(.2,.9,.25,1) both}
-@keyframes pageL{from{opacity:0;transform:scaleX(.15) translateX(20px)}to{opacity:1;transform:none}}
-@keyframes pageR{from{opacity:0;transform:scaleX(.15) translateX(-20px)}to{opacity:1;transform:none}}
-.sp-word{font-family:var(--f-d);font-size:31px;font-weight:600;letter-spacing:-.01em;color:var(--ink-1);margin-top:18px;
+#s-splash{align-items:center;justify-content:center}
+.sp-wrap{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center}
+.sp-mark{position:relative;width:150px;height:150px;display:flex;align-items:center;justify-content:center}
+.sp-mark svg{width:118px;height:118px;position:relative;z-index:2;animation:markIn 1s .35s cubic-bezier(.2,.9,.25,1) both, breath 3.6s 1.5s ease-in-out infinite}
+@keyframes markIn{from{opacity:0;transform:scale(.7)}to{opacity:1;transform:none}}
+.sp-ring{position:absolute;left:50%;top:50%;width:110px;height:110px;margin:-55px 0 0 -55px;border-radius:50%;
+  border:2px solid var(--tide);opacity:0}
+.sp-ring.a{animation:ripple 2.4s .9s ease-out infinite}
+.sp-ring.b{animation:ripple 2.4s 1.7s ease-out infinite}
+@keyframes ripple{0%{opacity:.45;transform:scale(.5)}70%{opacity:0}100%{opacity:0;transform:scale(1.9)}}
+@keyframes breath{0%,100%{transform:scale(1)}50%{transform:scale(1.04)}}
+.sp-word{font-family:var(--f-d);font-size:32px;font-weight:500;letter-spacing:-.01em;color:var(--ink-1);margin-top:20px;
   animation:riseIn .7s 1.05s cubic-bezier(.2,.9,.25,1) both}
-.sp-tag{font-family:var(--f-d);font-style:italic;font-size:15.5px;color:var(--ink-2);margin-top:8px;
-  animation:riseIn .7s 1.45s cubic-bezier(.2,.9,.25,1) both}
+.sp-tag{font-family:var(--f-d);font-weight:500;font-style:italic;font-size:15.5px;color:var(--ink-2);margin-top:8px;
+  animation:riseIn .7s 1.4s cubic-bezier(.2,.9,.25,1) both}
 @keyframes riseIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
 
 /* ═══ intro ═══ */
 .in-hero{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:0 30px}
 .in-ring{position:relative;width:216px;height:216px;margin-bottom:38px}
-.in-ring .ring{position:absolute;inset:0;border-radius:50%;border:1.5px dashed #E0D2C2;animation:spin 60s linear infinite}
-@keyframes spin{to{transform:rotate(360deg)}}
+.in-ring .ring{position:absolute;inset:0;border-radius:50%;border:1.5px dashed var(--border)}
+.in-ring .ring2{position:absolute;inset:34px;border-radius:50%;border:1.5px dashed var(--border);opacity:.6}
 .in-av{position:absolute;width:52px;height:52px;border-radius:50%;overflow:hidden;box-shadow:var(--sh-card);animation:riseIn .6s both}
 .in-av svg{width:100%;height:100%;display:block}
-.in-center{position:absolute;left:50%;top:50%;width:84px;height:84px;transform:translate(-50%,-50%)}
+.in-center{position:absolute;left:50%;top:50%;width:90px;height:90px;transform:translate(-50%,-50%)}
 .in-center svg{width:100%;height:100%}
 
-/* ═══ auth / verify ═══ */
+/* ═══ verify ═══ */
 .auth-head{padding:26px 20px 8px}
 .otp-row{display:flex;gap:12px;justify-content:center;margin:26px 0 10px}
 .otp{width:58px;height:64px;border-radius:var(--r-control);border:1.5px solid var(--border);background:var(--surface);
-  text-align:center;font-size:24px;font-weight:600;font-family:var(--f-d);outline:none;transition:.18s}
-.otp:focus{border-color:var(--clay);box-shadow:0 0 0 3px var(--clay-dim)}
-.link{color:var(--clay);font-weight:500}
+  text-align:center;font-size:24px;font-weight:500;font-family:var(--f-d);color:var(--ink-1);outline:none;transition:.18s}
+.otp:focus{border-color:var(--tide);box-shadow:0 0 0 3px var(--tide-dim)}
+.link{color:var(--tide);font-weight:500}
 
 /* ═══ identity ═══ */
 .av-row{display:flex;gap:14px;overflow-x:auto;padding:8px 2px 14px}
 .av-row::-webkit-scrollbar{display:none}
 .av-pick{width:64px;height:64px;border-radius:50%;overflow:hidden;flex-shrink:0;position:relative;transition:transform .22s}
 .av-pick svg{width:100%;height:100%;display:block}
-.av-pick.on{outline:2.5px solid var(--clay);outline-offset:3px;transform:scale(1.06)}
+.av-pick.on{outline:2.5px solid var(--tide);outline-offset:3px;transform:scale(1.06)}
 .name-sug{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
 .sug{height:34px;padding:0 14px;border-radius:999px;border:1.5px solid var(--border);background:var(--surface);
-  font-size:13.5px;font-weight:500;color:var(--ink-2);display:flex;align-items:center;gap:6px}
-.sug.on{border-color:var(--clay);background:var(--clay-dim);color:var(--clay);font-weight:600}
+  font-size:13.5px;font-weight:500;color:var(--ink-2)}
+.sug.on{border-color:var(--tide);background:var(--tide-dim);color:var(--tide);font-weight:600}
 .privacy-note{display:flex;gap:10px;align-items:flex-start;background:var(--sage-dim);border-radius:var(--r-card);padding:13px 15px;font-size:13px;line-height:1.5;color:var(--sage-deep);margin-top:18px}
 .privacy-note svg{flex-shrink:0;margin-top:1px}
 
@@ -149,14 +164,14 @@ input,textarea{font-family:var(--f-u);color:var(--ink-1)}
 .rule p{font-size:13.5px;line-height:1.5;color:var(--ink-2)}
 .consent{display:flex;gap:12px;align-items:flex-start;margin-top:16px}
 .cbox{width:24px;height:24px;border-radius:8px;border:1.5px solid var(--border);background:var(--surface);flex-shrink:0;display:flex;align-items:center;justify-content:center;transition:.18s;margin-top:1px}
-.cbox.on{background:var(--clay);border-color:var(--clay);color:var(--on-clay)}
+.cbox.on{background:var(--tide);border-color:var(--tide);color:var(--on-tide)}
 .consent p{font-size:13px;line-height:1.55;color:var(--ink-2)}
 
 /* ═══ topics ═══ */
 .topics{display:flex;flex-wrap:wrap;gap:10px;padding-top:18px}
 .topic{height:44px;padding:0 18px;border-radius:999px;border:1.5px solid var(--border);background:var(--surface);
   font-size:14.5px;font-weight:500;color:var(--ink-2);transition:.18s;display:flex;align-items:center}
-.topic.on{border-color:var(--clay);background:var(--clay-dim);color:var(--clay);font-weight:600}
+.topic.on{border-color:var(--tide);background:var(--tide-dim);color:var(--tide);font-weight:600}
 
 /* ═══ communities ═══ */
 .com-card{background:var(--surface);border-radius:var(--r-card);box-shadow:var(--sh-card);padding:16px 18px;margin-bottom:12px}
@@ -165,16 +180,17 @@ input,textarea{font-family:var(--f-u);color:var(--ink-1)}
 .com-name{font-size:15.5px;font-weight:600}
 .com-meta{font-size:12.5px;color:var(--ink-3);margin-top:2px}
 .com-desc{font-size:13.5px;line-height:1.5;color:var(--ink-2);margin-top:10px}
-.com-join{height:38px;padding:0 18px;border-radius:999px;background:var(--clay-dim);color:var(--clay);font-size:13.5px;font-weight:600;flex-shrink:0;transition:.2s}
+.com-join{height:38px;padding:0 18px;border-radius:999px;background:var(--tide-dim);color:var(--tide);font-size:13.5px;font-weight:600;flex-shrink:0;transition:.2s}
 .com-join.joined{background:var(--sage-dim);color:var(--sage-deep)}
 
 /* ═══ circle reveal ═══ */
 .cir-stage{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:0 30px}
 .cir-ring{position:relative;width:250px;height:250px;margin-bottom:34px}
-.cir-halo{position:absolute;inset:16px;border-radius:50%;background:radial-gradient(circle, rgba(217,152,43,.16), rgba(217,152,43,0) 70%);animation:breath 3.2s ease-in-out infinite}
-.cir-line{position:absolute;inset:28px;border-radius:50%;border:1.5px dashed #E0D2C2;animation:spin 70s linear infinite}
+.cir-halo{position:absolute;inset:16px;border-radius:50%;background:radial-gradient(circle, var(--tide-dim), transparent 70%);animation:breath 3.2s ease-in-out infinite}
+.cir-wave{position:absolute;left:50%;top:50%;width:90px;height:90px;margin:-45px 0 0 -45px;border-radius:50%;border:2px solid var(--tide);opacity:0;animation:ripple 2.6s .3s ease-out infinite}
+.cir-line{position:absolute;inset:28px;border-radius:50%;border:1.5px dashed var(--border)}
 .cir-me{position:absolute;left:50%;top:50%;width:74px;height:74px;margin:-37px 0 0 -37px;border-radius:50%;overflow:hidden;
-  box-shadow:0 4px 20px rgba(76,54,44,.2);animation:popIn .6s .2s cubic-bezier(.2,.9,.25,1) both}
+  box-shadow:0 4px 20px rgba(15,24,28,.28);animation:popIn .6s .2s cubic-bezier(.2,.9,.25,1) both;z-index:2}
 .cir-me svg{width:100%;height:100%}
 .cir-m{position:absolute;left:50%;top:50%;width:48px;height:48px;margin:-24px 0 0 -24px;border-radius:50%;overflow:hidden;box-shadow:var(--sh-card);animation:popIn .55s both}
 .cir-m svg{width:100%;height:100%}
@@ -185,28 +201,30 @@ input,textarea{font-family:var(--f-u);color:var(--ink-1)}
 .orbs{display:flex;justify-content:space-between;padding:30px 4px 6px}
 .orb-w{display:flex;flex-direction:column;align-items:center;gap:9px;width:60px}
 .orb{width:54px;height:54px;border-radius:50%;position:relative;transition:transform .25s;background:var(--track)}
-.orb i{position:absolute;inset:6px;border-radius:50%;opacity:.85}
+.orb i{position:absolute;inset:6px;border-radius:50%;opacity:.9}
 .orb-w span{font-family:var(--f-d);font-size:14px;font-weight:500;color:var(--ink-3);transition:.2s}
 .orb-w.on .orb{outline:2.5px solid var(--oc);outline-offset:3px;animation:breath 3.2s ease-in-out infinite}
-.orb-w.on span{color:var(--oc);font-weight:600}
+.orb-w.on span{color:var(--oc);font-weight:500}
 .note-inp{border-radius:var(--r-card);border:1.5px solid var(--border);background:var(--surface);min-height:110px;
-  padding:14px 16px;font-size:14.5px;line-height:1.6;outline:none;resize:none;width:100%;transition:.18s}
-.note-inp:focus{border-color:var(--clay);box-shadow:0 0 0 3px var(--clay-dim)}
+  padding:14px 16px;font-size:14.5px;line-height:1.6;outline:none;resize:none;width:100%;transition:.18s;color:var(--ink-1)}
+.note-inp:focus{border-color:var(--tide);box-shadow:0 0 0 3px var(--tide-dim)}
+.note-inp::placeholder{color:var(--ink-3)}
 
 /* ═══ home ═══ */
 .greet{padding:14px 0 4px}
-.greet-row{display:flex;align-items:center;justify-content:space-between}
-.greet h1{font-family:var(--f-d);font-size:26px;font-weight:600;letter-spacing:-.01em;line-height:1.2}
+.greet-row{display:flex;align-items:flex-start;justify-content:space-between}
+.greet h1{font-family:var(--f-d);font-size:27px;font-weight:500;letter-spacing:-.005em;line-height:1.2}
 .greet .d{font-size:13px;color:var(--ink-3);margin-top:3px}
+.greet-actions{display:flex;gap:8px}
 .bell{width:42px;height:42px;border-radius:50%;background:var(--surface);box-shadow:var(--sh-card);display:flex;align-items:center;justify-content:center;color:var(--ink-2);position:relative}
-.bell .dot{position:absolute;top:11px;right:12px;width:7px;height:7px;border-radius:50%;background:var(--clay);border:1.5px solid var(--surface)}
+.bell .dot{position:absolute;top:11px;right:12px;width:7px;height:7px;border-radius:50%;background:var(--tide);border:1.5px solid var(--surface)}
 .mood-today{display:flex;align-items:center;gap:12px;margin-top:16px}
-.mt-orb{width:40px;height:40px;border-radius:50%;background:var(--honey-dim);display:flex;align-items:center;justify-content:center;flex-shrink:0}
-.mt-orb i{width:22px;height:22px;border-radius:50%;background:radial-gradient(circle at 38% 32%, #E8B04B, var(--mood-okay))}
+.mt-orb{width:40px;height:40px;border-radius:50%;background:var(--moon-dim);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.mt-orb i{width:22px;height:22px;border-radius:50%;background:radial-gradient(circle at 38% 32%, rgba(255,255,255,.5), transparent 45%), var(--mood-okay)}
 .compose-card{display:flex;align-items:center;gap:12px;margin-top:12px;cursor:pointer}
 .compose-card .av{width:38px;height:38px;border-radius:50%;overflow:hidden;flex-shrink:0}
 .compose-card .av svg{width:100%;height:100%}
-.compose-hint{flex:1;font-family:var(--f-d);font-style:italic;font-size:15px;color:var(--ink-3)}
+.compose-hint{flex:1;font-family:var(--f-d);font-weight:500;font-style:italic;font-size:15px;color:var(--ink-3)}
 .sec-head{display:flex;align-items:baseline;justify-content:space-between;margin:26px 0 10px}
 .sec-head .link{font-size:13px}
 .post{margin-bottom:12px}
@@ -219,7 +237,7 @@ input,textarea{font-family:var(--f-u);color:var(--ink-1)}
 .post-txt{font-size:14.5px;line-height:1.6;color:var(--ink-1);margin-top:10px}
 .post-acts{display:flex;gap:18px;margin-top:12px;padding-top:11px;border-top:1px solid var(--border-soft)}
 .pact{display:flex;align-items:center;gap:6px;font-size:12.5px;font-weight:500;color:var(--ink-2)}
-.pact.enc.on{color:var(--clay)}
+.pact.enc.on{color:var(--tide)}
 .guide-tag{display:inline-flex;align-items:center;height:18px;padding:0 8px;border-radius:999px;background:var(--sage-dim);color:var(--sage-deep);font-size:10.5px;font-weight:600;margin-left:6px}
 .hscroll{display:flex;gap:12px;overflow-x:auto;padding:2px 20px 8px;margin:0 -20px}
 .hscroll::-webkit-scrollbar{display:none}
@@ -232,25 +250,25 @@ input,textarea{font-family:var(--f-u);color:var(--ink-1)}
 /* bottom nav */
 .nav{flex-shrink:0;background:var(--surface);border-top:1px solid var(--border-soft);display:grid;grid-template-columns:1fr 1fr 76px 1fr 1fr;padding:6px 8px 22px;position:relative}
 .ntab{display:flex;flex-direction:column;align-items:center;gap:3px;padding:7px 0 0;font-size:10.5px;font-weight:500;color:var(--ink-3)}
-.ntab.on{color:var(--clay);font-weight:600}
+.ntab.on{color:var(--tide);font-weight:600}
 .nfab{position:relative;display:flex;align-items:flex-start;justify-content:center}
-.nfab button{width:52px;height:52px;border-radius:50%;background:var(--clay);color:var(--on-clay);box-shadow:var(--sh-fab);
+.nfab button{width:52px;height:52px;border-radius:50%;background:var(--tide);color:var(--on-tide);box-shadow:var(--sh-fab);
   display:flex;align-items:center;justify-content:center;margin-top:-14px;transition:transform .2s}
 .nfab button:active{transform:scale(.92)}
 
 /* ═══ sheets ═══ */
 .sheet-wrap{position:absolute;inset:0;z-index:60;display:none}
 .sheet-wrap.open{display:block}
-.sheet-ovl{position:absolute;inset:0;background:rgba(33,27,38,.5);opacity:0;transition:opacity .3s}
+.sheet-ovl{position:absolute;inset:0;background:rgba(10,20,24,.55);opacity:0;transition:opacity .3s}
 .sheet-wrap.open .sheet-ovl{opacity:1}
 .sheet{position:absolute;left:0;right:0;bottom:0;background:var(--surface);border-radius:24px 24px 0 0;box-shadow:var(--sh-sheet);
   padding:8px 20px 34px;transform:translateY(100%);transition:transform .3s cubic-bezier(.2,.9,.25,1);max-height:88%;overflow-y:auto}
 .sheet-wrap.open .sheet{transform:none}
 .drag{width:36px;height:4px;border-radius:2px;background:var(--track);margin:6px auto 16px}
-.sheet-h{font-family:var(--f-d);font-size:21px;font-weight:600;letter-spacing:-.01em;line-height:1.25}
+.sheet-h{font-family:var(--f-d);font-size:22px;font-weight:500;letter-spacing:-.005em;line-height:1.28}
 .sheet-s{font-size:13.5px;color:var(--ink-2);margin-top:6px;line-height:1.5}
 .role-opt{display:flex;gap:14px;align-items:flex-start;border:1.5px solid var(--border);border-radius:var(--r-card);padding:16px;margin-top:12px;transition:.18s;cursor:pointer;background:var(--surface)}
-.role-opt.on{border-color:var(--clay);background:var(--clay-dim)}
+.role-opt.on{border-color:var(--tide);background:var(--tide-dim)}
 .role-ic{width:42px;height:42px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0}
 .role-opt b{display:block;font-size:15px;margin-bottom:3px}
 .role-opt p{font-size:13px;line-height:1.5;color:var(--ink-2)}
@@ -261,7 +279,7 @@ input,textarea{font-family:var(--f-u);color:var(--ink-1)}
 .purpose p{font-size:12.5px;color:var(--ink-3);margin-top:1px}
 .aud{display:flex;gap:6px;background:var(--track);border-radius:999px;padding:4px;margin-top:14px}
 .aud button{flex:1;height:36px;border-radius:999px;font-size:13px;font-weight:500;color:var(--ink-2)}
-.aud button.on{background:var(--surface);color:var(--clay);font-weight:600;box-shadow:var(--sh-card)}
+.aud button.on{background:var(--surface);color:var(--tide);font-weight:600;box-shadow:var(--sh-card)}
 .as-note{display:flex;align-items:center;gap:8px;margin-top:14px;font-size:12.5px;color:var(--ink-3)}
 .as-note .av{width:24px;height:24px;border-radius:50%;overflow:hidden}
 .as-note .av svg{width:100%;height:100%}
@@ -269,10 +287,10 @@ input,textarea{font-family:var(--f-u);color:var(--ink-1)}
 /* toast */
 #toast{position:absolute;top:60px;left:0;right:0;display:flex;justify-content:center;z-index:80;pointer-events:none}
 .toast{display:inline-flex;align-items:center;gap:8px;border-radius:999px;padding:9px 18px;font-size:13px;font-weight:500;
-  box-shadow:0 6px 24px rgba(46,36,51,.16);opacity:0;transform:translateY(-14px);transition:.28s}
+  box-shadow:0 6px 24px rgba(15,24,28,.18);opacity:0;transform:translateY(-14px);transition:.28s}
 .toast.in{opacity:1;transform:none}
-.toast.sage{background:#E8F1E8;color:var(--sage-deep)}
-.toast.honey{background:#FAF0DC;color:var(--honey-deep)}
+.toast.sage{background:var(--sage-dim);color:var(--sage-deep)}
+.toast.moon{background:var(--moon-dim);color:var(--moon-deep)}
 </style>
 </head>
 <body>
@@ -280,11 +298,10 @@ input,textarea{font-family:var(--f-u);color:var(--ink-1)}
 
   <!-- ══ SPLASH ══ -->
   <div class="screen active" id="s-splash">
-    <div class="sp-wrap" style="flex:1;justify-content:center">
+    <div class="sp-wrap">
       <div class="sp-mark">
-        <div class="sp-glow"></div><div class="sp-orb"></div>
-        <svg class="sp-page l" viewBox="0 0 52 66" fill="none"><path d="M52 8C40.5 1 18.5-.5 4.5 4.5 1.8 5.5 0 7.8 0 10.6v46c0 4 4 6.7 7.8 5.5C20.5 58 40 60 52 66V8Z" fill="#B9542F"/></svg>
-        <svg class="sp-page r" viewBox="0 0 52 66" fill="none"><path d="M0 8C11.5 1 33.5-.5 47.5 4.5c2.7 1 4.5 3.3 4.5 6.1v46c0 4-4 6.7-7.8 5.5C31.5 58 12 60 0 66V8Z" fill="#2E2433"/></svg>
+        <span class="sp-ring a"></span><span class="sp-ring b"></span>
+        <span data-mark></span>
       </div>
       <div class="sp-word">mindbook</div>
       <div class="sp-tag">Do life alone? Nah.</div>
@@ -294,23 +311,23 @@ input,textarea{font-family:var(--f-u);color:var(--ink-1)}
 
   <!-- ══ INTRO ══ -->
   <div class="screen" id="s-intro">
-    <div class="sbar" data-sb></div>
+    <div class="ob-top"><span style="width:40px"></span><span></span><button class="theme-tgl" data-theme-tgl></button></div>
     <div class="in-hero">
       <div class="in-ring">
-        <div class="ring"></div>
+        <div class="ring"></div><div class="ring2"></div>
         <div class="in-av" style="left:6px;top:26px;animation-delay:.15s" data-av="1"></div>
         <div class="in-av" style="right:-2px;top:52px;animation-delay:.3s" data-av="2"></div>
         <div class="in-av" style="left:38px;bottom:-6px;animation-delay:.45s" data-av="3"></div>
         <div class="in-av" style="right:34px;bottom:14px;animation-delay:.6s" data-av="4"></div>
         <div class="in-av" style="left:88px;top:-16px;animation-delay:.75s" data-av="5"></div>
-        <div class="in-center"><svg viewBox="0 0 64 64" fill="none"><circle cx="32" cy="14.5" r="5" fill="#D9982B"/><path d="M32 26.5C28.2 23 21.4 22.4 16.5 24.1c-1 .35-1.5 1.1-1.5 2.05v18.1c0 1.35 1.35 2.2 2.6 1.8 4.5-1.45 10.6-.75 14.4 2.75V26.5Z" fill="#B9542F"/><path d="M32 26.5c3.8-3.5 10.6-4.1 15.5-2.4 1 .35 1.5 1.1 1.5 2.05v18.1c0 1.35-1.35 2.2-2.6 1.8-4.5-1.45-10.6-.75-14.4 2.75V26.5Z" fill="#2E2433"/></svg></div>
+        <div class="in-center" data-mark></div>
       </div>
       <div class="h-display" style="font-size:30px">Life is heavy sometimes.<br/>Carry it together.</div>
       <div class="h-sub" style="max-width:290px">A safe, anonymous space to share, heal, grow, and support others through life's challenges.</div>
     </div>
     <div class="ob-foot">
       <button class="btn" onclick="goTo('s-auth')">Get started</button>
-      <button class="btn-ghost" onclick="toast('Sign-in designed in the next flow','honey')">I already have an account</button>
+      <button class="btn-ghost" onclick="toast('Sign-in designed in the next flow','moon')">I already have an account</button>
     </div>
     <div class="home-ind"></div>
   </div>
@@ -390,11 +407,11 @@ input,textarea{font-family:var(--f-u);color:var(--ink-1)}
         <div class="h-sub">Mindbook stays safe because everyone holds these.</div>
       </div>
       <div class="card" style="margin-top:14px;padding:6px 18px">
-        <div class="rule"><span class="rule-ic" style="background:var(--clay-dim);color:var(--clay)"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20.5s-7.5-4.7-9.3-9.6C1.3 7 4 4 7.2 4c2 0 3.8 1.1 4.8 2.7C13 5.1 14.8 4 16.8 4 20 4 22.7 7 21.3 10.9c-1.8 4.9-9.3 9.6-9.3 9.6Z"/></svg></span>
+        <div class="rule"><span class="rule-ic" style="background:var(--tide-dim);color:var(--tide)"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20.5s-7.5-4.7-9.3-9.6C1.3 7 4 4 7.2 4c2 0 3.8 1.1 4.8 2.7C13 5.1 14.8 4 16.8 4 20 4 22.7 7 21.3 10.9c-1.8 4.9-9.3 9.6-9.3 9.6Z"/></svg></span>
           <div><b>Kindness first</b><p>Encourage, never mock. Everyone here is carrying something.</p></div></div>
-        <div class="rule"><span class="rule-ic" style="background:var(--dusk-dim);color:var(--dusk-deep)"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3.5-6.5 10-6.5S22 12 22 12s-3.5 6.5-10 6.5S2 12 2 12Z"/><circle cx="12" cy="12" r="3"/><path d="M4 4l16 16" /></svg></span>
+        <div class="rule"><span class="rule-ic" style="background:var(--peri-dim);color:var(--peri-deep)"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3.5-6.5 10-6.5S22 12 22 12s-3.5 6.5-10 6.5S2 12 2 12Z"/><circle cx="12" cy="12" r="3"/><path d="M4 4l16 16"/></svg></span>
           <div><b>No judgment</b><p>People share hard things. Meet them with care, not opinions.</p></div></div>
-        <div class="rule"><span class="rule-ic" style="background:var(--plum-dim);color:var(--plum)"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="10" width="16" height="11" rx="2.5"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg></span>
+        <div class="rule"><span class="rule-ic" style="background:var(--storm-dim);color:var(--storm)"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="10" width="16" height="11" rx="2.5"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg></span>
           <div><b>Privacy is sacred</b><p>What is shared in a Circle stays in the Circle. No screenshots, no outing.</p></div></div>
         <div class="rule"><span class="rule-ic" style="background:var(--sage-dim);color:var(--sage-deep)"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v4M12 17v4M3 12h4M17 12h4"/><circle cx="12" cy="12" r="4.5"/></svg></span>
           <div><b>Support, not treatment</b><p>Mindbook complements professional care, it never replaces it. In crisis, help is one tap away.</p></div></div>
@@ -436,7 +453,7 @@ input,textarea{font-family:var(--f-u);color:var(--ink-1)}
       </div>
       <div class="com-card">
         <div class="com-top">
-          <span class="com-ic" style="background:var(--dusk-dim);color:var(--dusk-deep)"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3c-2 3.5-6.5 5-6.5 10a6.5 6.5 0 0 0 13 0C18.5 8 14 6.5 12 3Z"/></svg></span>
+          <span class="com-ic" style="background:var(--peri-dim);color:var(--peri-deep)"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3c-2 3.5-6.5 5-6.5 10a6.5 6.5 0 0 0 13 0C18.5 8 14 6.5 12 3Z"/></svg></span>
           <div style="flex:1"><div class="com-name">Anxiety Support</div><div class="com-meta">2,140 members · 61 Circles</div></div>
           <button class="com-join" onclick="openRole(this,'Anxiety Support')">Join</button>
         </div>
@@ -444,7 +461,7 @@ input,textarea{font-family:var(--f-u);color:var(--ink-1)}
       </div>
       <div class="com-card">
         <div class="com-top">
-          <span class="com-ic" style="background:var(--honey-dim);color:var(--honey-deep)"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="7" width="18" height="13" rx="2.5"/><path d="M8 7V5.5A1.5 1.5 0 0 1 9.5 4h5A1.5 1.5 0 0 1 16 5.5V7"/></svg></span>
+          <span class="com-ic" style="background:var(--moon-dim);color:var(--moon-deep)"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="7" width="18" height="13" rx="2.5"/><path d="M8 7V5.5A1.5 1.5 0 0 1 9.5 4h5A1.5 1.5 0 0 1 16 5.5V7"/></svg></span>
           <div style="flex:1"><div class="com-name">School &amp; Career Pressure</div><div class="com-meta">1,872 members · 54 Circles</div></div>
           <button class="com-join" onclick="openRole(this,'School &amp; Career Pressure')">Join</button>
         </div>
@@ -468,7 +485,7 @@ input,textarea{font-family:var(--f-u);color:var(--ink-1)}
     <div class="sbar" data-sb></div>
     <div class="cir-stage">
       <div class="cir-ring">
-        <div class="cir-halo"></div><div class="cir-line"></div>
+        <div class="cir-halo"></div><div class="cir-wave"></div><div class="cir-line"></div>
         <div class="cir-me" data-av="0"></div>
         <div class="cir-m" style="--tx:0px;--ty:-101px;animation-delay:.45s" data-av="1"></div>
         <div class="cir-m" style="--tx:88px;--ty:-50px;animation-delay:.6s" data-av="2"></div>
@@ -512,22 +529,25 @@ input,textarea{font-family:var(--f-u);color:var(--ink-1)}
       <div class="greet">
         <div class="greet-row">
           <div><h1>Good evening,<br/>QuietRiver</h1><div class="d">Tuesday 14 July</div></div>
-          <button class="bell" onclick="toast('Notifications designed in the next flow','honey')"><span class="dot"></span>
-            <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M18 9a6 6 0 0 0-12 0c0 6-2.5 7.5-2.5 7.5h17S18 15 18 9Z"/><path d="M10 20a2.2 2.2 0 0 0 4 0"/></svg></button>
+          <div class="greet-actions">
+            <button class="theme-tgl" data-theme-tgl></button>
+            <button class="bell" onclick="toast('Notifications designed in the next flow','moon')"><span class="dot"></span>
+              <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M18 9a6 6 0 0 0-12 0c0 6-2.5 7.5-2.5 7.5h17S18 15 18 9Z"/><path d="M10 20a2.2 2.2 0 0 0 4 0"/></svg></button>
+          </div>
         </div>
       </div>
       <div class="card mood-today">
         <span class="mt-orb"><i></i></span>
-        <div style="flex:1"><b style="font-size:14.5px">Checked in · feeling <span style="font-family:var(--f-d);color:var(--honey-deep)" id="home-mood">Okay</span></b>
+        <div style="flex:1"><b style="font-size:14.5px">Checked in · feeling <span style="font-family:var(--f-d);color:var(--moon-deep)" id="home-mood">Okay</span></b>
           <div style="font-size:12.5px;color:var(--ink-3);margin-top:2px">Day 1 of your journal</div></div>
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#9C92A1" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--ink-3)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
       </div>
       <div class="card compose-card" onclick="openComposer()">
         <span class="av" data-av="0"></span>
         <span class="compose-hint">What's going on with you today?</span>
-        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#B9542F" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="var(--tide)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>
       </div>
-      <div class="sec-head"><span class="eyebrow">Your Circle · Anxiety Support</span><span class="link" onclick="toast('Circle space designed in the next flow','honey')">Open</span></div>
+      <div class="sec-head"><span class="eyebrow">Your Circle · Anxiety Support</span><span class="link" onclick="toast('Circle space designed in the next flow','moon')">Open</span></div>
       <div class="card post">
         <div class="post-top">
           <span class="av" data-av="6"></span>
@@ -537,25 +557,25 @@ input,textarea{font-family:var(--f-u);color:var(--ink-1)}
         <div class="post-txt">Welcome QuietRiver. This Circle is a soft place to land. Share when you're ready, read quietly when you're not. Both count.</div>
         <div class="post-acts">
           <button class="pact enc" onclick="encourage(this)"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20.5s-7.5-4.7-9.3-9.6C1.3 7 4 4 7.2 4c2 0 3.8 1.1 4.8 2.7C13 5.1 14.8 4 16.8 4 20 4 22.7 7 21.3 10.9c-1.8 4.9-9.3 9.6-9.3 9.6Z"/></svg><span>4</span></button>
-          <button class="pact" onclick="toast('Replies designed in the next flow','honey')"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.4 8.4 0 0 1-9 8.4 8.9 8.9 0 0 1-3.9-.9L3 20l1-4.9a8.4 8.4 0 1 1 17-3.6Z"/></svg><span>Reply</span></button>
+          <button class="pact" onclick="toast('Replies designed in the next flow','moon')"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.4 8.4 0 0 1-9 8.4 8.9 8.9 0 0 1-3.9-.9L3 20l1-4.9a8.4 8.4 0 1 1 17-3.6Z"/></svg><span>Reply</span></button>
         </div>
       </div>
       <div class="card post">
         <div class="post-top">
           <span class="av" data-av="3"></span>
           <div style="flex:1"><span class="post-who">SteadyOak</span><div class="post-when">5h ago · to your Circle</div></div>
-          <span class="pill" style="background:var(--plum-dim);color:var(--plum)">My Story</span>
+          <span class="pill" style="background:var(--storm-dim);color:var(--storm)">My Story</span>
         </div>
         <div class="post-txt">Two years ago I couldn't sit through a lecture without my chest tightening. Last week I gave a presentation to forty people. Slow is still forward.</div>
         <div class="post-acts">
           <button class="pact enc" onclick="encourage(this)"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20.5s-7.5-4.7-9.3-9.6C1.3 7 4 4 7.2 4c2 0 3.8 1.1 4.8 2.7C13 5.1 14.8 4 16.8 4 20 4 22.7 7 21.3 10.9c-1.8 4.9-9.3 9.6-9.3 9.6Z"/></svg><span>11</span></button>
-          <button class="pact" onclick="toast('Replies designed in the next flow','honey')"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.4 8.4 0 0 1-9 8.4 8.9 8.9 0 0 1-3.9-.9L3 20l1-4.9a8.4 8.4 0 1 1 17-3.6Z"/></svg><span>Reply</span></button>
+          <button class="pact" onclick="toast('Replies designed in the next flow','moon')"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.4 8.4 0 0 1-9 8.4 8.9 8.9 0 0 1-3.9-.9L3 20l1-4.9a8.4 8.4 0 1 1 17-3.6Z"/></svg><span>Reply</span></button>
         </div>
       </div>
-      <div class="sec-head"><span class="eyebrow">More rooms</span><span class="link" onclick="toast('Browse designed in the next flow','honey')">Browse</span></div>
+      <div class="sec-head"><span class="eyebrow">More rooms</span><span class="link" onclick="toast('Browse designed in the next flow','moon')">Browse</span></div>
       <div class="hscroll">
         <div class="card mini-com">
-          <span class="com-ic" style="background:var(--honey-dim);color:var(--honey-deep);width:38px;height:38px"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="7" width="18" height="13" rx="2.5"/><path d="M8 7V5.5A1.5 1.5 0 0 1 9.5 4h5A1.5 1.5 0 0 1 16 5.5V7"/></svg></span>
+          <span class="com-ic" style="background:var(--moon-dim);color:var(--moon-deep);width:38px;height:38px"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="7" width="18" height="13" rx="2.5"/><path d="M8 7V5.5A1.5 1.5 0 0 1 9.5 4h5A1.5 1.5 0 0 1 16 5.5V7"/></svg></span>
           <div class="com-name" style="margin-top:10px;font-size:14.5px">School &amp; Career Pressure</div>
           <div class="com-meta">1,872 members</div>
         </div>
@@ -565,7 +585,7 @@ input,textarea{font-family:var(--f-u);color:var(--ink-1)}
           <div class="com-meta">980 members</div>
         </div>
         <div class="card mini-com">
-          <span class="com-ic" style="background:var(--dusk-dim);color:var(--dusk-deep);width:38px;height:38px"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8" r="3.2"/><path d="M3.5 20c.6-3.5 2.8-5.5 5.5-5.5s4.9 2 5.5 5.5"/><circle cx="17" cy="9" r="2.6"/><path d="M15.5 14.8c2.3.3 4 2 4.5 4.7"/></svg></span>
+          <span class="com-ic" style="background:var(--peri-dim);color:var(--peri-deep);width:38px;height:38px"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8" r="3.2"/><path d="M3.5 20c.6-3.5 2.8-5.5 5.5-5.5s4.9 2 5.5 5.5"/><circle cx="17" cy="9" r="2.6"/><path d="M15.5 14.8c2.3.3 4 2 4.5 4.7"/></svg></span>
           <div class="com-name" style="margin-top:10px;font-size:14.5px">Relationships</div>
           <div class="com-meta">2,431 members</div>
         </div>
@@ -574,12 +594,12 @@ input,textarea{font-family:var(--f-u);color:var(--ink-1)}
     </div>
     <nav class="nav">
       <button class="ntab on"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 10.5 12 4l8 6.5V20a1.5 1.5 0 0 1-1.5 1.5h-13A1.5 1.5 0 0 1 4 20Z"/><path d="M9.5 21.5v-7h5v7"/></svg>Home</button>
-      <button class="ntab" onclick="toast('Communities designed in the next flow','honey')"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8" r="3.2"/><path d="M3.5 20c.6-3.5 2.8-5.5 5.5-5.5s4.9 2 5.5 5.5"/><circle cx="17" cy="9" r="2.6"/><path d="M15.5 14.8c2.3.3 4 2 4.5 4.7"/></svg>Rooms</button>
+      <button class="ntab" onclick="toast('Communities designed in the next flow','moon')"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8" r="3.2"/><path d="M3.5 20c.6-3.5 2.8-5.5 5.5-5.5s4.9 2 5.5 5.5"/><circle cx="17" cy="9" r="2.6"/><path d="M15.5 14.8c2.3.3 4 2 4.5 4.7"/></svg>Rooms</button>
       <span class="nfab"><button onclick="openComposer()"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg></button></span>
-      <button class="ntab" onclick="toast('Circle space designed in the next flow','honey')"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8.5" stroke-dasharray="3.6 3.4"/><circle cx="12" cy="12" r="3.4"/></svg>My Circle</button>
-      <button class="ntab" onclick="toast('Profile designed in the next flow','honey')"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="3.6"/><path d="M5 20.5c.8-4 3.6-6 7-6s6.2 2 7 6"/></svg>Profile</button>
+      <button class="ntab" onclick="toast('Circle space designed in the next flow','moon')"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8.5" stroke-dasharray="3.6 3.4"/><circle cx="12" cy="12" r="3.4"/></svg>My Circle</button>
+      <button class="ntab" onclick="toast('Profile designed in the next flow','moon')"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="3.6"/><path d="M5 20.5c.8-4 3.6-6 7-6s6.2 2 7 6"/></svg>Profile</button>
     </nav>
-    <div class="home-ind" style="background:rgba(46,36,51,.3)"></div>
+    <div class="home-ind"></div>
   </div>
 
   <!-- ══ ROLE SHEET ══ -->
@@ -590,7 +610,7 @@ input,textarea{font-family:var(--f-u);color:var(--ink-1)}
       <div class="sheet-h">What brings you to <span id="role-com">Anxiety Support</span> today?</div>
       <div class="sheet-s">This helps us balance your Circle. You can change it anytime.</div>
       <div class="role-opt" onclick="pickRole(this)">
-        <span class="role-ic" style="background:var(--dusk-dim);color:var(--dusk-deep)"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21c4.5-2.5 7-6.2 7-10.5V6l-7-3-7 3v4.5C5 14.8 7.5 18.5 12 21Z"/></svg></span>
+        <span class="role-ic" style="background:var(--peri-dim);color:var(--peri-deep)"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21c4.5-2.5 7-6.2 7-10.5V6l-7-3-7 3v4.5C5 14.8 7.5 18.5 12 21Z"/></svg></span>
         <div><b>Seeking support</b><p>I'm going through this right now and would like people who understand.</p></div>
       </div>
       <div class="role-opt" onclick="pickRole(this)">
@@ -610,11 +630,11 @@ input,textarea{font-family:var(--f-u);color:var(--ink-1)}
         <div class="sheet-h">What's going on with you today?</div>
         <div class="sheet-s">Start with why you're sharing.</div>
         <div style="margin-top:8px">
-          <div class="purpose" onclick="pickPurpose('I need support','rose')"><span class="purpose-ic" style="background:var(--rose-dim);color:var(--rose-deep)"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21c4.5-2.5 7-6.2 7-10.5V6l-7-3-7 3v4.5C5 14.8 7.5 18.5 12 21Z"/></svg></span><div><b>I need support</b><p>Something is heavy and I don't want to carry it alone</p></div></div>
-          <div class="purpose" onclick="pickPurpose('I need advice','dusk')"><span class="purpose-ic" style="background:var(--dusk-dim);color:var(--dusk-deep)"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M9.2 9a2.8 2.8 0 0 1 5.5.7c0 1.8-2.7 2.3-2.7 3.8"/><path d="M12 17h.01"/></svg></span><div><b>I need advice</b><p>I'd like perspectives from people who've been here</p></div></div>
-          <div class="purpose" onclick="pickPurpose('I want to encourage someone','sage')"><span class="purpose-ic" style="background:var(--sage-dim);color:var(--sage-deep)"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20.5s-7.5-4.7-9.3-9.6C1.3 7 4 4 7.2 4c2 0 3.8 1.1 4.8 2.7C13 5.1 14.8 4 16.8 4 20 4 22.7 7 21.3 10.9c-1.8 4.9-9.3 9.6-9.3 9.6Z"/></svg></span><div><b>I want to encourage someone</b><p>Words for whoever needs them today</p></div></div>
-          <div class="purpose" onclick="pickPurpose('I want to share my story','plum')"><span class="purpose-ic" style="background:var(--plum-dim);color:var(--plum)"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5V6a2 2 0 0 1 2-2h14v14H6.5A2.5 2.5 0 0 0 4 19.5Z"/><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20v3.5H6.5A2.5 2.5 0 0 1 4 19.5Z"/></svg></span><div><b>I want to share my story</b><p>Where I've been, for whoever is there now</p></div></div>
-          <div class="purpose" onclick="pickPurpose('Prayer request','honey')"><span class="purpose-ic" style="background:var(--honey-dim);color:var(--honey-deep)"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3c1.2 3.6 1.2 6.8 0 9.5C10.8 9.8 10.8 6.6 12 3Z"/><path d="M12 12.5c2 2.4 3 5 3 8.5-2.4-.8-4.6-2.4-3-8.5ZM12 12.5c-2 2.4-3 5-3 8.5 2.4-.8 4.6-2.4 3-8.5Z"/></svg></span><div><b>Prayer request</b><p>Ask your room to stand with you</p></div></div>
+          <div class="purpose" onclick="pickPurpose('I need support')"><span class="purpose-ic" style="background:var(--rose-dim);color:var(--rose-deep)"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21c4.5-2.5 7-6.2 7-10.5V6l-7-3-7 3v4.5C5 14.8 7.5 18.5 12 21Z"/></svg></span><div><b>I need support</b><p>Something is heavy and I don't want to carry it alone</p></div></div>
+          <div class="purpose" onclick="pickPurpose('I need advice')"><span class="purpose-ic" style="background:var(--peri-dim);color:var(--peri-deep)"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M9.2 9a2.8 2.8 0 0 1 5.5.7c0 1.8-2.7 2.3-2.7 3.8"/><path d="M12 17h.01"/></svg></span><div><b>I need advice</b><p>I'd like perspectives from people who've been here</p></div></div>
+          <div class="purpose" onclick="pickPurpose('I want to encourage someone')"><span class="purpose-ic" style="background:var(--sage-dim);color:var(--sage-deep)"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20.5s-7.5-4.7-9.3-9.6C1.3 7 4 4 7.2 4c2 0 3.8 1.1 4.8 2.7C13 5.1 14.8 4 16.8 4 20 4 22.7 7 21.3 10.9c-1.8 4.9-9.3 9.6-9.3 9.6Z"/></svg></span><div><b>I want to encourage someone</b><p>Words for whoever needs them today</p></div></div>
+          <div class="purpose" onclick="pickPurpose('I want to share my story')"><span class="purpose-ic" style="background:var(--storm-dim);color:var(--storm)"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5V6a2 2 0 0 1 2-2h14v14H6.5A2.5 2.5 0 0 0 4 19.5Z"/><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20v3.5H6.5A2.5 2.5 0 0 1 4 19.5Z"/></svg></span><div><b>I want to share my story</b><p>Where I've been, for whoever is there now</p></div></div>
+          <div class="purpose" onclick="pickPurpose('Prayer request')"><span class="purpose-ic" style="background:var(--moon-dim);color:var(--moon-deep)"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3c1.2 3.6 1.2 6.8 0 9.5C10.8 9.8 10.8 6.6 12 3Z"/><path d="M12 12.5c2 2.4 3 5 3 8.5-2.4-.8-4.6-2.4-3-8.5ZM12 12.5c-2 2.4-3 5-3 8.5 2.4-.8 4.6-2.4 3-8.5Z"/></svg></span><div><b>Prayer request</b><p>Ask your room to stand with you</p></div></div>
         </div>
       </div>
       <div id="comp-2" style="display:none">
@@ -637,28 +657,63 @@ input,textarea{font-family:var(--f-u);color:var(--ink-1)}
 </div>
 
 <script>
-/* ── avatars: abstract warm generative patterns ── */
+/* ── the mind + lotus mark ── */
+const MARK = `<svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs><linearGradient id="mk" x1="32" y1="8" x2="32" y2="56" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#4E92A6"/><stop offset="1" stop-color="#4A4E75"/></linearGradient></defs>
+  <g stroke="url(#mk)" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M32 13c-2.6-3-7-3.4-9.4-1C19.4 9 13.6 9.8 12 14c-3.8.6-5.4 5.4-2.8 8.4-2.8 2.4-2 7.4 1.6 8.8-2.2 3-.4 7.6 3.4 8.2-1 3.6 2 7 5.8 6.4 1.6 2.2 4.8 2.8 7 1.2"/>
+    <path d="M32 13c2.6-3 7-3.4 9.4-1C44.6 9 50.4 9.8 52 14c3.8.6 5.4 5.4 2.8 8.4 2.8 2.4 2 7.4-1.6 8.8 2.2 3 .4 7.6-3.4 8.2 1 3.6-2 7-5.8 6.4-1.6 2.2-4.8 2.8-7 1.2"/>
+    <path d="M32 13v34" stroke-width="1.8" opacity="0.5"/>
+  </g>
+  <path d="M32 39c-5.4 1-11-.6-13.6-4.4 3.2-2.6 8.4-2.4 11.4.4.9.9 1.6 2.2 2.2 4Z" fill="#5E72A8"/>
+  <path d="M32 39c5.4 1 11-.6 13.6-4.4-3.2-2.6-8.4-2.4-11.4.4-.9.9-1.6 2.2-2.2 4Z" fill="#5E72A8"/>
+  <path d="M32 39c-4.2-1.6-7-4.8-7-8.8 0-1.4.4-2.8 1-4.2 3.2 1.6 5.4 4.6 6 8.4Z" fill="#6B7FB3"/>
+  <path d="M32 39c4.2-1.6 7-4.8 7-8.8 0-1.4-.4-2.8-1-4.2-3.2 1.6-5.4 4.6-6 8.4Z" fill="#6B7FB3"/>
+  <path d="M32 39c-3-2.4-4.8-5.6-4.8-9 0-3 1.6-6.2 4.8-8.8 3.2 2.6 4.8 5.8 4.8 8.8 0 3.4-1.8 6.6-4.8 9Z" fill="#8093C4"/>
+  <circle cx="32" cy="26.5" r="1.9" fill="#C9A24B"/>
+</svg>`;
+document.querySelectorAll('[data-mark]').forEach(el=>el.innerHTML=MARK);
+
+/* ── avatars: abstract cool-water patterns ── */
 const AVS = [
-  `<svg viewBox="0 0 64 64"><rect width="64" height="64" fill="#B9542F"/><circle cx="32" cy="40" r="19" fill="#E8B04B"/><circle cx="32" cy="46" r="11" fill="#FAF5EE"/></svg>`,
-  `<svg viewBox="0 0 64 64"><rect width="64" height="64" fill="#567A9B"/><path d="M0 40c10-8 22-8 32 0s22 8 32 0v24H0Z" fill="#FAF5EE"/><circle cx="20" cy="20" r="8" fill="#E8B04B"/></svg>`,
-  `<svg viewBox="0 0 64 64"><rect width="64" height="64" fill="#4E3A5C"/><circle cx="22" cy="26" r="13" fill="#D57A55"/><circle cx="44" cy="42" r="9" fill="#FAF5EE"/></svg>`,
-  `<svg viewBox="0 0 64 64"><rect width="64" height="64" fill="#5E8C63"/><circle cx="24" cy="22" r="10" fill="#FAF5EE"/><path d="M4 64c6-18 50-18 56 0Z" fill="#E8B04B"/></svg>`,
-  `<svg viewBox="0 0 64 64"><rect width="64" height="64" fill="#D9982B"/><circle cx="32" cy="32" r="17" fill="none" stroke="#FAF5EE" stroke-width="5"/><circle cx="32" cy="32" r="6" fill="#4E3A5C"/></svg>`,
-  `<svg viewBox="0 0 64 64"><rect width="64" height="64" fill="#A5907C"/><path d="M8 22c12 8 36 8 48 0M8 34c12 8 36 8 48 0M8 46c12 8 36 8 48 0" stroke="#FAF5EE" stroke-width="4.5" fill="none" stroke-linecap="round"/></svg>`,
-  `<svg viewBox="0 0 64 64"><rect width="64" height="64" fill="#3F6B45"/><circle cx="32" cy="28" r="12" fill="#FAF5EE"/><path d="M12 56c4-10 12-15 20-15s16 5 20 15Z" fill="#E8B04B"/></svg>`,
+  `<svg viewBox="0 0 64 64"><rect width="64" height="64" fill="#33718A"/><circle cx="32" cy="40" r="19" fill="#9FCDD7"/><circle cx="32" cy="46" r="11" fill="#F3F6F6"/></svg>`,
+  `<svg viewBox="0 0 64 64"><rect width="64" height="64" fill="#5C7A99"/><path d="M0 40c10-8 22-8 32 0s22 8 32 0v24H0Z" fill="#E7EEEE"/><circle cx="20" cy="20" r="8" fill="#C9A24B"/></svg>`,
+  `<svg viewBox="0 0 64 64"><rect width="64" height="64" fill="#4A4E75"/><circle cx="22" cy="26" r="13" fill="#8093C4"/><circle cx="44" cy="42" r="9" fill="#E7EEEE"/></svg>`,
+  `<svg viewBox="0 0 64 64"><rect width="64" height="64" fill="#4E8D7C"/><circle cx="24" cy="22" r="10" fill="#E7EEEE"/><path d="M4 64c6-18 50-18 56 0Z" fill="#9FCDD7"/></svg>`,
+  `<svg viewBox="0 0 64 64"><rect width="64" height="64" fill="#6B7FB3"/><circle cx="32" cy="32" r="17" fill="none" stroke="#E7EEEE" stroke-width="5"/><circle cx="32" cy="32" r="6" fill="#C9A24B"/></svg>`,
+  `<svg viewBox="0 0 64 64"><rect width="64" height="64" fill="#4E9B8F"/><path d="M8 22c12 8 36 8 48 0M8 34c12 8 36 8 48 0M8 46c12 8 36 8 48 0" stroke="#F3F6F6" stroke-width="4.5" fill="none" stroke-linecap="round"/></svg>`,
+  `<svg viewBox="0 0 64 64"><rect width="64" height="64" fill="#33718A"/><circle cx="32" cy="28" r="12" fill="#F3F6F6"/><path d="M12 56c4-10 12-15 20-15s16 5 20 15Z" fill="#C9A24B"/></svg>`,
 ];
 document.querySelectorAll('[data-av]').forEach(el=>{ el.innerHTML = AVS[+el.dataset.av % AVS.length]; });
 
-/* ── status bar ── */
+/* ── status bar (currentColor, theme-aware) ── */
 const SB = `<span class="t">9:41</span>
 <span style="display:flex;gap:6px;align-items:center">
-<svg width="17" height="11" viewBox="0 0 17 11" fill="#2E2433"><rect x="0" y="7" width="3" height="4" rx="0.8"/><rect x="4.5" y="5" width="3" height="6" rx="0.8"/><rect x="9" y="2.5" width="3" height="8.5" rx="0.8"/><rect x="13.5" y="0" width="3" height="11" rx="0.8"/></svg>
-<svg width="16" height="12" viewBox="0 0 16 12" fill="#2E2433"><path d="M8 9.6a1.6 1.6 0 1 1 0 2.4 1.6 1.6 0 0 1 0-2.4Zm-3-3a5.4 5.4 0 0 1 6 0l-1.3 1.6a3.2 3.2 0 0 0-3.4 0Zm-2.8-3a9.5 9.5 0 0 1 11.6 0l-1.3 1.6a7.4 7.4 0 0 0-9 0Z"/></svg>
-<svg width="25" height="12" viewBox="0 0 25 12" fill="none"><rect x="0.5" y="0.5" width="21" height="11" rx="3" stroke="#2E2433" stroke-opacity="0.4"/><rect x="2" y="2" width="18" height="8" rx="1.8" fill="#2E2433"/><path d="M23.5 4v4a2.2 2.2 0 0 0 0-4Z" fill="#2E2433" fill-opacity="0.4"/></svg>
+<svg width="17" height="11" viewBox="0 0 17 11" fill="currentColor"><rect x="0" y="7" width="3" height="4" rx="0.8"/><rect x="4.5" y="5" width="3" height="6" rx="0.8"/><rect x="9" y="2.5" width="3" height="8.5" rx="0.8"/><rect x="13.5" y="0" width="3" height="11" rx="0.8"/></svg>
+<svg width="16" height="12" viewBox="0 0 16 12" fill="currentColor"><path d="M8 9.6a1.6 1.6 0 1 1 0 2.4 1.6 1.6 0 0 1 0-2.4Zm-3-3a5.4 5.4 0 0 1 6 0l-1.3 1.6a3.2 3.2 0 0 0-3.4 0Zm-2.8-3a9.5 9.5 0 0 1 11.6 0l-1.3 1.6a7.4 7.4 0 0 0-9 0Z"/></svg>
+<svg width="25" height="12" viewBox="0 0 25 12" fill="none"><rect x="0.5" y="0.5" width="21" height="11" rx="3" stroke="currentColor" stroke-opacity="0.4"/><rect x="2" y="2" width="18" height="8" rx="1.8" fill="currentColor"/><path d="M23.5 4v4a2.2 2.2 0 0 0 0-4Z" fill="currentColor" fill-opacity="0.4"/></svg>
 </span>`;
 document.querySelectorAll('[data-sb]').forEach(el=>el.innerHTML=SB);
 document.querySelectorAll('[data-ic="back"]').forEach(el=>el.innerHTML=
   `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>`);
+
+/* ── theme toggle ── */
+const SUN = `<svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.5v2M12 19.5v2M2.5 12h2M19.5 12h2M5 5l1.5 1.5M17.5 17.5 19 19M19 5l-1.5 1.5M6.5 17.5 5 19"/></svg>`;
+const MOONI = `<svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 14.5A8 8 0 0 1 9.5 4 8 8 0 1 0 20 14.5Z"/></svg>`;
+function paintToggles(){
+  const dark = document.getElementById('phone').getAttribute('data-theme')==='dark';
+  document.querySelectorAll('[data-theme-tgl]').forEach(b=>b.innerHTML = dark ? SUN : MOONI);
+}
+function toggleTheme(){
+  const p = document.getElementById('phone');
+  const dark = p.getAttribute('data-theme')==='dark';
+  if(dark) p.removeAttribute('data-theme'); else p.setAttribute('data-theme','dark');
+  try{ localStorage.setItem('mb-theme', dark?'light':'dark'); }catch(e){}
+  paintToggles();
+}
+document.querySelectorAll('[data-theme-tgl]').forEach(b=>b.onclick=toggleTheme);
+try{ if(localStorage.getItem('mb-theme')==='dark') document.getElementById('phone').setAttribute('data-theme','dark'); }catch(e){}
+paintToggles();
 
 /* ── navigation ── */
 function goTo(id){
@@ -768,12 +823,13 @@ const MOODS = [
   {n:'Heavy', c:'var(--mood-heavy)'}, {n:'Low', c:'var(--mood-low)'},
   {n:'Okay', c:'var(--mood-okay)'}, {n:'Good', c:'var(--mood-good)'}, {n:'Light', c:'var(--mood-light)'}
 ];
+const MOOD_DEEP = {Heavy:'var(--storm)', Low:'var(--peri-deep)', Okay:'var(--sage-deep)', Good:'var(--sage-deep)', Light:'var(--moon-deep)'};
 let mood = null;
 const orbWrap = document.getElementById('orbs');
 MOODS.forEach((m,i)=>{
   const w = document.createElement('div');
   w.className = 'orb-w'; w.style.setProperty('--oc', m.c);
-  w.innerHTML = `<div class="orb"><i style="background:radial-gradient(circle at 38% 32%, rgba(255,252,248,.55), transparent 42%), ${m.c}"></i></div><span>${m.n}</span>`;
+  w.innerHTML = `<div class="orb"><i style="background:radial-gradient(circle at 38% 32%, rgba(255,255,255,.55), transparent 44%), ${m.c}"></i></div><span>${m.n}</span>`;
   w.onclick = ()=>{
     document.querySelectorAll('.orb-w').forEach(x=>x.classList.remove('on'));
     w.classList.add('on'); mood = m.n;
@@ -781,14 +837,13 @@ MOODS.forEach((m,i)=>{
   };
   orbWrap.appendChild(w);
 });
-const MOOD_DEEP = {Heavy:'#4E3A5C', Low:'#3E5F7E', Okay:'#7C6A57', Good:'#8A5B0F', Light:'#3F6B45'};
 function finishCheckin(){
   const m = MOODS.find(x=>x.n===mood) || MOODS[2];
   const el = document.getElementById('home-mood');
   el.textContent = m.n;
   el.style.color = MOOD_DEEP[m.n];
   document.querySelector('.mt-orb i').style.background =
-    `radial-gradient(circle at 38% 32%, rgba(255,252,248,.55), transparent 42%), ${m.c}`;
+    `radial-gradient(circle at 38% 32%, rgba(255,255,255,.5), transparent 45%), ${m.c}`;
   goTo('s-home');
   setTimeout(()=>toast('Checked in · see you tomorrow','sage'), 450);
 }
