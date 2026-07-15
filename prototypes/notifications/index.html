@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<!--
+  MINDBOOK · Canon prototype 04 — Notifications
+  Canvas: 390×844 device-only. Built to canon (BRAND v2 + DESIGN + prototypes 01-03).
+  Calm by design: unread = soft tide dot, never a red badge. Light + dark.
+-->
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Mindbook · Notifications</title>
+<link rel="preconnect" href="https://api.fontshare.com"/>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://api.fontshare.com/v2/css?f[]=switzer@400,500,600&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+<style>
+:root{
+  --canvas:#F3F6F6;--surface:#FCFEFD;--hover:#EAF0F0;--track:#E7EEEE;
+  --ink-1:#213238;--ink-2:#5C6E74;--ink-3:#8FA1A6;--border:#DDE6E5;--border-soft:#E6EDEC;
+  --tide:#33718A;--tide-press:#285D73;--tide-dim:rgba(51,113,138,.10);--on-tide:#F2FAFC;
+  --sage:#4E8D7C;--sage-dim:rgba(78,141,124,.14);--sage-deep:#33685A;
+  --peri:#6B7FB3;--peri-dim:rgba(107,127,179,.13);--peri-deep:#4A5C8F;
+  --moon:#C9A24B;--moon-dim:rgba(201,162,75,.16);--moon-deep:#8A6A1F;
+  --rose:#C05B5B;--rose-dim:rgba(192,91,91,.10);--rose-deep:#9E4343;
+  --storm:#4A4E75;--storm-dim:rgba(74,78,117,.12);
+  --r-control:14px;--r-card:20px;--sh-card:0 2px 16px rgba(35,60,70,.08);--sh-sheet:0 -8px 40px rgba(15,24,28,.20);
+  --f-d:'Baloo 2','Trebuchet MS',sans-serif;--f-u:'Switzer',system-ui,sans-serif;
+}
+#phone[data-theme="dark"]{
+  --canvas:#0F181C;--surface:#17232A;--hover:#1E2D34;--track:#22333B;
+  --ink-1:#E7EEF0;--ink-2:#9FB2B8;--ink-3:#6E8188;--border:#26363E;--border-soft:#1D2C33;
+  --tide:#5CA2BC;--tide-press:#4A8DA6;--tide-dim:rgba(92,162,188,.16);--on-tide:#0D1A20;
+  --sage:#6FAE9C;--sage-dim:rgba(111,174,156,.18);--sage-deep:#9FD3C4;
+  --peri:#8B9CC9;--peri-dim:rgba(139,156,201,.18);--peri-deep:#B3C0E0;
+  --moon:#D9B66A;--moon-dim:rgba(217,182,106,.18);--moon-deep:#E8CE92;
+  --rose:#D07A7A;--rose-dim:rgba(208,122,122,.16);--rose-deep:#E5A3A3;
+  --storm:#8489B8;--storm-dim:rgba(132,137,184,.18);
+  --sh-card:0 2px 16px rgba(0,0,0,.30);--sh-sheet:0 -8px 40px rgba(0,0,0,.5);
+}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-font-smoothing:antialiased}
+html,body{width:100%;height:100%;background:#0A1418;display:flex;align-items:center;justify-content:center;overflow:hidden;font-family:var(--f-u)}
+b,strong{font-weight:600}
+button{font-family:var(--f-u);border:none;background:none;cursor:pointer;color:inherit}
+.phone{width:390px;height:844px;background:var(--canvas);border-radius:32px;overflow:hidden;position:relative;flex-shrink:0;box-shadow:0 50px 130px rgba(0,0,0,.7),inset 0 0 0 1px rgba(255,255,255,.05);color:var(--ink-1);font-size:15px;line-height:1.4;transition:background .3s}
+.screen{position:absolute;inset:0;display:flex;flex-direction:column;background:var(--canvas);transition:background .3s}
+.sbar{height:50px;flex-shrink:0;display:flex;align-items:flex-end;justify-content:space-between;padding:0 28px 6px;color:var(--ink-1)}
+.sbar .t{font-size:14px;font-weight:600}
+.sbar svg{display:block}
+.home-ind{position:absolute;bottom:8px;left:50%;transform:translateX(-50%);width:134px;height:5px;border-radius:3px;background:var(--ink-3);opacity:.35;z-index:40}
+.body{flex:1;overflow-y:auto;padding:0 20px;display:flex;flex-direction:column}
+.body::-webkit-scrollbar{display:none}
+.phead{display:flex;align-items:center;padding:6px 8px 8px;flex-shrink:0;position:relative;min-height:48px}
+.phead-title{flex:1;text-align:center;font-family:var(--f-d);font-weight:500;font-size:18px}
+.phead-btn{width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;color:var(--ink-2);z-index:2}
+.phead-btn.solid{background:var(--surface);box-shadow:var(--sh-card)}
+.eyebrow{font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-3);margin:16px 0 6px}
+.mark-read{font-size:12.5px;font-weight:500;color:var(--tide)}
+
+/* check-in nudge */
+.nudge{background:linear-gradient(180deg,var(--tide-dim),transparent);border:1.5px solid var(--tide-dim);border-radius:var(--r-card);padding:16px 18px;margin-top:6px;display:flex;align-items:center;gap:14px}
+.nudge-orb{width:44px;height:44px;border-radius:50%;flex-shrink:0;background:radial-gradient(circle at 38% 32%,rgba(255,255,255,.5),transparent 46%),var(--moon);animation:breath 3.4s ease-in-out infinite}
+@keyframes breath{0%,100%{transform:scale(1)}50%{transform:scale(1.05)}}
+.nudge b{font-family:var(--f-d);font-weight:500;font-size:16px;display:block}
+.nudge p{font-size:12.5px;color:var(--ink-2);margin-top:2px}
+.nudge-cta{margin-left:auto;height:36px;padding:0 16px;border-radius:999px;background:var(--tide);color:var(--on-tide);font-size:13px;font-weight:600;flex-shrink:0}
+
+/* notification row */
+.ntf{display:flex;gap:13px;padding:14px 6px 14px 0;border-bottom:1px solid var(--border-soft);cursor:pointer;position:relative;border-radius:12px}
+.ntf.unread{background:var(--tide-dim);margin:0 -10px;padding:14px 10px;border-bottom:none}
+.ntf.unread + .ntf{border-top:1px solid var(--border-soft)}
+.ntf-ic{width:44px;height:44px;border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;overflow:hidden}
+.ntf-ic svg{display:block}
+.ntf-ic.av svg{width:100%;height:100%}
+.ntf-body{flex:1;min-width:0}
+.ntf-txt{font-size:14px;line-height:1.45;color:var(--ink-1)}
+.ntf-txt b{font-weight:600}
+.ntf-when{font-size:12px;color:var(--ink-3);margin-top:3px}
+.ntf-preview{font-size:13px;color:var(--ink-2);margin-top:7px;padding:9px 12px;background:var(--surface);border-radius:12px;line-height:1.45;box-shadow:var(--sh-card)}
+.ntf.unread .ntf-preview{background:var(--canvas)}
+.dot{width:8px;height:8px;border-radius:50%;background:var(--tide);flex-shrink:0;align-self:center}
+
+/* sheet */
+.sheet-wrap{position:absolute;inset:0;z-index:60;display:none}
+.sheet-wrap.open{display:block}
+.sheet-ovl{position:absolute;inset:0;background:rgba(10,20,24,.55);opacity:0;transition:.3s}
+.sheet-wrap.open .sheet-ovl{opacity:1}
+.sheet{position:absolute;left:0;right:0;bottom:0;background:var(--surface);border-radius:24px 24px 0 0;box-shadow:var(--sh-sheet);padding:8px 20px 34px;transform:translateY(100%);transition:transform .3s cubic-bezier(.2,.9,.25,1);max-height:88%;overflow-y:auto}
+.sheet-wrap.open .sheet{transform:none}
+.drag{width:36px;height:4px;border-radius:2px;background:var(--track);margin:6px auto 16px}
+.sheet-h{font-family:var(--f-d);font-weight:500;font-size:20px}
+.sheet-s{font-size:13.5px;color:var(--ink-2);margin-top:6px;line-height:1.5}
+.trow{display:flex;align-items:flex-start;gap:14px;padding:15px 0;border-bottom:1px solid var(--border-soft)}
+.trow:last-child{border-bottom:none}
+.trow b{font-size:14.5px;font-weight:500}
+.trow p{font-size:12.5px;color:var(--ink-3);margin-top:3px}
+.tgl{width:46px;height:27px;border-radius:999px;background:var(--border);position:relative;transition:.2s;flex-shrink:0;margin-top:2px}
+.tgl.on{background:var(--tide)}
+.tgl::after{content:'';position:absolute;top:3px;left:3px;width:21px;height:21px;border-radius:50%;background:#fff;transition:.2s;box-shadow:0 1px 3px rgba(0,0,0,.2)}
+.tgl.on::after{transform:translateX(19px)}
+.theme-tgl{color:var(--ink-2)}
+#toast{position:absolute;top:60px;left:0;right:0;display:flex;justify-content:center;z-index:80;pointer-events:none}
+.toast{display:inline-flex;align-items:center;gap:8px;border-radius:999px;padding:9px 18px;font-size:13px;font-weight:500;box-shadow:0 6px 24px rgba(15,24,28,.18);opacity:0;transform:translateY(-14px);transition:.28s}
+.toast.in{opacity:1;transform:none}
+.toast.sage{background:var(--sage-dim);color:var(--sage-deep)}
+.toast.moon{background:var(--moon-dim);color:var(--moon-deep)}
+</style>
+</head>
+<body>
+<div class="phone" id="phone">
+  <div class="screen" id="s-notif">
+    <div class="sbar" data-sb></div>
+    <div class="phead">
+      <button class="phead-btn solid" onclick="openHref('../onboarding/index.html?screen=s-home')" data-ic="back"></button>
+      <div class="phead-title">Notifications</div>
+      <button class="phead-btn theme-tgl" data-theme-tgl></button>
+    </div>
+    <div class="body">
+      <!-- check-in nudge -->
+      <div class="nudge">
+        <span class="nudge-orb"></span>
+        <div style="flex:1;min-width:0"><b>How are you, really?</b><p>Your evening check-in is waiting</p></div>
+        <button class="nudge-cta" onclick="openHref('../onboarding/index.html?screen=s-checkin')">Check in</button>
+      </div>
+
+      <div style="display:flex;align-items:center;justify-content:space-between">
+        <div class="eyebrow" style="margin-bottom:0">Today</div>
+        <button class="mark-read" onclick="markAll()">Mark all read</button>
+      </div>
+
+      <div class="ntf unread" onclick="openHref('../circle/index.html?screen=s-post')">
+        <span class="ntf-ic av" data-av="6"></span>
+        <div class="ntf-body"><div class="ntf-txt"><b>StillWaters</b> and 3 others encouraged your post in <b>Still Harbour</b></div><div class="ntf-when">20 minutes ago</div></div>
+        <span class="dot"></span>
+      </div>
+
+      <div class="ntf unread" onclick="openHref('../circle/index.html?screen=s-post')">
+        <span class="ntf-ic av" data-av="1"></span>
+        <div class="ntf-body"><div class="ntf-txt"><b>SteadyOak</b> replied to you</div>
+          <div class="ntf-preview">"Night before, I write the worst case on paper then write what I'd actually do. You've got this."</div>
+          <div class="ntf-when">1 hour ago · Still Harbour</div></div>
+      </div>
+
+      <div class="ntf" onclick="openHref('../circle/index.html?screen=s-circle')">
+        <span class="ntf-ic" style="background:var(--moon-dim);color:var(--moon-deep)"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M7 4h10v5a5 5 0 0 1-10 0Z"/><path d="M12 14v4M8 21h8M5 4H3v2a4 4 0 0 0 4 4M19 4h2v2a4 4 0 0 1-4 4"/></svg></span>
+        <div class="ntf-body"><div class="ntf-txt">Your Circle is celebrating <b>GentleTide's</b> milestone. Send some warmth?</div><div class="ntf-when">3 hours ago</div></div>
+      </div>
+
+      <div class="eyebrow">This week</div>
+
+      <div class="ntf" onclick="openHref('../circle/index.html?screen=s-post')">
+        <span class="ntf-ic av" data-av="4"></span>
+        <div class="ntf-body"><div class="ntf-txt"><b>BraveHeart</b> shared in your Circle: "How do you quiet the noise before something big?"</div><div class="ntf-when">Yesterday · Still Harbour</div></div>
+      </div>
+
+      <div class="ntf" onclick="openHref('../circle/index.html?screen=s-community')">
+        <span class="ntf-ic" style="background:var(--peri-dim);color:var(--peri-deep)"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m3 11 18-5v12L3 13v-2Z"/><path d="M11.6 16.8a3 3 0 0 1-5.8-1.6"/></svg></span>
+        <div class="ntf-body"><div class="ntf-txt"><b>Anxiety Support</b> added a new resource: a 4-minute box-breathing audio</div><div class="ntf-when">2 days ago</div></div>
+      </div>
+
+      <div class="ntf" onclick="openHref('../profile/index.html?screen=s-mood')">
+        <span class="ntf-ic" style="background:var(--sage-dim);color:var(--sage-deep)"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 17l6-6 4 4 6-8"/><path d="M15 7h5v5"/></svg></span>
+        <div class="ntf-body"><div class="ntf-txt">A gentle note: you've checked in 12 days in a row. Your journal is growing.</div><div class="ntf-when">2 days ago</div></div>
+      </div>
+
+      <div class="ntf" onclick="toast('Report status designed later','moon')">
+        <span class="ntf-ic" style="background:var(--tide-dim);color:var(--tide)"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="16" height="16" rx="4"/><path d="m8 12 3 3 5-6"/></svg></span>
+        <div class="ntf-body"><div class="ntf-txt">Thank you for your report. A moderator reviewed it and took action. You helped keep the space safe.</div><div class="ntf-when">3 days ago</div></div>
+      </div>
+      <div style="height:16px;flex-shrink:0"></div>
+    </div>
+    <div class="home-ind"></div>
+  </div>
+
+  <!-- notif settings -->
+  <div class="sheet-wrap" id="sheet-settings">
+    <div class="sheet-ovl" onclick="closeSheet()"></div>
+    <div class="sheet">
+      <div class="drag"></div>
+      <div class="sheet-h">Notification settings</div>
+      <div class="sheet-s">We keep these gentle. No pressure, no streak-shaming.</div>
+      <div style="margin-top:12px">
+        <div class="trow"><div style="flex:1"><b>Daily check-in reminder</b><p>One soft nudge, at a time you choose</p></div><span class="tgl on" onclick="tgl(this)"></span></div>
+        <div class="trow"><div style="flex:1"><b>Replies to my posts</b><p>When someone responds to you</p></div><span class="tgl on" onclick="tgl(this)"></span></div>
+        <div class="trow"><div style="flex:1"><b>Encouragements</b><p>When members send a heart</p></div><span class="tgl on" onclick="tgl(this)"></span></div>
+        <div class="trow"><div style="flex:1"><b>Circle &amp; community updates</b><p>New posts, resources, milestones</p></div><span class="tgl on" onclick="tgl(this)"></span></div>
+        <div class="trow"><div style="flex:1"><b>Quiet hours</b><p>Nothing between 10pm and 8am</p></div><span class="tgl" onclick="tgl(this)"></span></div>
+      </div>
+    </div>
+  </div>
+  <div id="toast"></div>
+</div>
+<script>
+const AVS=[
+`<svg viewBox="0 0 64 64"><rect width="64" height="64" fill="#33718A"/><circle cx="32" cy="40" r="19" fill="#9FCDD7"/><circle cx="32" cy="46" r="11" fill="#F3F6F6"/></svg>`,
+`<svg viewBox="0 0 64 64"><rect width="64" height="64" fill="#5C7A99"/><path d="M0 40c10-8 22-8 32 0s22 8 32 0v24H0Z" fill="#E7EEEE"/><circle cx="20" cy="20" r="8" fill="#C9A24B"/></svg>`,
+`<svg viewBox="0 0 64 64"><rect width="64" height="64" fill="#4A4E75"/><circle cx="22" cy="26" r="13" fill="#8093C4"/><circle cx="44" cy="42" r="9" fill="#E7EEEE"/></svg>`,
+`<svg viewBox="0 0 64 64"><rect width="64" height="64" fill="#4E8D7C"/><circle cx="24" cy="22" r="10" fill="#E7EEEE"/><path d="M4 64c6-18 50-18 56 0Z" fill="#9FCDD7"/></svg>`,
+`<svg viewBox="0 0 64 64"><rect width="64" height="64" fill="#6B7FB3"/><circle cx="32" cy="32" r="17" fill="none" stroke="#E7EEEE" stroke-width="5"/><circle cx="32" cy="32" r="6" fill="#C9A24B"/></svg>`,
+`<svg viewBox="0 0 64 64"><rect width="64" height="64" fill="#4E9B8F"/><path d="M8 22c12 8 36 8 48 0M8 34c12 8 36 8 48 0M8 46c12 8 36 8 48 0" stroke="#F3F6F6" stroke-width="4.5" fill="none" stroke-linecap="round"/></svg>`,
+`<svg viewBox="0 0 64 64"><rect width="64" height="64" fill="#33718A"/><circle cx="32" cy="28" r="12" fill="#F3F6F6"/><path d="M12 56c4-10 12-15 20-15s16 5 20 15Z" fill="#C9A24B"/></svg>`,
+];
+document.querySelectorAll('[data-av]').forEach(el=>el.innerHTML=AVS[+el.dataset.av%AVS.length]);
+const SB=`<span class="t">9:41</span><span style="display:flex;gap:6px;align-items:center">
+<svg width="17" height="11" viewBox="0 0 17 11" fill="currentColor"><rect x="0" y="7" width="3" height="4" rx="0.8"/><rect x="4.5" y="5" width="3" height="6" rx="0.8"/><rect x="9" y="2.5" width="3" height="8.5" rx="0.8"/><rect x="13.5" y="0" width="3" height="11" rx="0.8"/></svg>
+<svg width="16" height="12" viewBox="0 0 16 12" fill="currentColor"><path d="M8 9.6a1.6 1.6 0 1 1 0 2.4 1.6 1.6 0 0 1 0-2.4Zm-3-3a5.4 5.4 0 0 1 6 0l-1.3 1.6a3.2 3.2 0 0 0-3.4 0Zm-2.8-3a9.5 9.5 0 0 1 11.6 0l-1.3 1.6a7.4 7.4 0 0 0-9 0Z"/></svg>
+<svg width="25" height="12" viewBox="0 0 25 12" fill="none"><rect x="0.5" y="0.5" width="21" height="11" rx="3" stroke="currentColor" stroke-opacity="0.4"/><rect x="2" y="2" width="18" height="8" rx="1.8" fill="currentColor"/><path d="M23.5 4v4a2.2 2.2 0 0 0 0-4Z" fill="currentColor" fill-opacity="0.4"/></svg></span>`;
+document.querySelectorAll('[data-sb]').forEach(el=>el.innerHTML=SB);
+document.querySelectorAll('[data-ic="back"]').forEach(el=>el.innerHTML=`<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>`);
+const SUN=`<svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.5v2M12 19.5v2M2.5 12h2M19.5 12h2M5 5l1.5 1.5M17.5 17.5 19 19M19 5l-1.5 1.5M6.5 17.5 5 19"/></svg>`;
+const MOONI=`<svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 14.5A8 8 0 0 1 9.5 4 8 8 0 1 0 20 14.5Z"/></svg>`;
+function paintToggles(){const d=document.getElementById('phone').getAttribute('data-theme')==='dark';document.querySelectorAll('[data-theme-tgl]').forEach(b=>b.innerHTML=d?SUN:MOONI);}
+document.querySelectorAll('[data-theme-tgl]').forEach(b=>b.onclick=()=>{const p=document.getElementById('phone');const d=p.getAttribute('data-theme')==='dark';if(d)p.removeAttribute('data-theme');else p.setAttribute('data-theme','dark');try{localStorage.setItem('mb-theme',d?'light':'dark')}catch(e){}paintToggles();});
+try{if(localStorage.getItem('mb-theme')==='dark')document.getElementById('phone').setAttribute('data-theme','dark')}catch(e){}
+paintToggles();
+function openHref(h){location.href=h}
+let tt;function toast(m,t='sage'){const w=document.getElementById('toast');w.innerHTML=`<span class="toast ${t}">${m}</span>`;requestAnimationFrame(()=>requestAnimationFrame(()=>w.firstChild.classList.add('in')));clearTimeout(tt);tt=setTimeout(()=>{if(w.firstChild)w.firstChild.classList.remove('in')},3200)}
+function openSheet(){document.getElementById('sheet-settings').classList.add('open')}
+function closeSheet(){document.getElementById('sheet-settings').classList.remove('open')}
+function tgl(el){el.classList.toggle('on')}
+function markAll(){document.querySelectorAll('.ntf.unread').forEach(n=>{n.classList.remove('unread');const d=n.querySelector('.dot');if(d)d.remove()});toast('All caught up','sage')}
+(function(){const fit=()=>{const s=Math.min(1,(innerHeight-24)/844,(innerWidth-24)/390);document.getElementById('phone').style.transform=s<1?`scale(${s})`:'';};addEventListener('resize',fit);fit();})();
+</script>
+</body>
+</html>
