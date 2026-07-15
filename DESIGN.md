@@ -124,4 +124,10 @@ Fonts:
 | Flutter app | `app/` (later) |
 | Backend (Spring Boot) | `backend/` (later) |
 
-Prototype-first: every flow ships as a clickable device-only HTML prototype (light + dark) before any Flutter code. `prototypes/onboarding/` is the canon other screens copy from.
+Prototype-first: every flow ships as a clickable device-only HTML prototype (light + dark) before any Flutter code.
+
+**Canon prototypes (copy from these):**
+- `prototypes/onboarding/` — splash, auth, anonymous identity, house rules, topics, communities, Circle reveal, first check-in, home feed, composer.
+- `prototypes/circle/` — Circle space (identity crest, member ring, guided-conversation card, feed with milestone posts), post detail (threaded replies + reply bar), Community page (hero + stats + your-Circle shortcut + moderator announcement + featured resources + community feed), and the safety set: post-actions sheet, report sheet (with self-harm-concern → crisis escalation), block confirm, crisis-support sheet, members sheet.
+
+**Components introduced in prototype 02** (reuse verbatim): `.circle-id`/`.circle-crest`/`.member-ring`; `.guided` (guided-conversation card); `.post` + `.milestone` variant; post-purpose pills `.p-support/.p-advice/.p-enc/.p-story/.p-prayer`; `.comment` thread + `.reply-bar`; `.com-hero`/`.cstat`/`.yc-card`/`.announce`/`.res-card`; safety sheets `.act-row`/`.reason`/`.crisis-line`/`.mem-row` + `.role-chip`. **Horizontal scroll rows inside a flex-column `.body` must carry `flex-shrink:0`** or they collapse.
